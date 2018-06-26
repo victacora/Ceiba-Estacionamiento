@@ -1,9 +1,8 @@
 package co.com.ceiba.estacionamiento.dominio.validaciones;
 
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
-import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoRegistradoException;
-import co.com.ceiba.estacionamiento.dominio.repositorio.RepositorioTicketParqueadero;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.RepositorioTicketParqueadero;
 
 public class ValidacionVehiculoRegistrado implements Validacion {
 

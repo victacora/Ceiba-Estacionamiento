@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import co.com.ceiba.estacionamiento.dominio.repositorio.RepositorioTicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.validaciones.Validacion;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionCupo;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionPlacaAccesoRestringido;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoRegistrado;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.RepositorioTicketParqueadero;
 
 public class Vigilante {
 
@@ -21,9 +21,9 @@ public class Vigilante {
 	public Vigilante(RepositorioTicketParqueadero repositorioTicketParqueadero) {
 		this.repositorioTicketParqueadero = repositorioTicketParqueadero;
 		validaciones = new ArrayList<>();
-		validaciones.add(new ValidacionCupo(repositorioTicketParqueadero));
+		validaciones.add(new ValidacionCupo(this.repositorioTicketParqueadero));
 		validaciones.add(new ValidacionPlacaAccesoRestringido());
-		validaciones.add(new ValidacionVehiculoRegistrado(repositorioTicketParqueadero));
+		validaciones.add(new ValidacionVehiculoRegistrado(this.repositorioTicketParqueadero));
 	}
 
 	public TicketParqueadero ingresarVehiculo(Vehiculo vehiculo) {
