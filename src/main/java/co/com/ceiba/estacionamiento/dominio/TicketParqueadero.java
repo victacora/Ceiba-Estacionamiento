@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class TicketParqueadero {
 	private Date fechaIngreso;
+	private Date fechaSalida;
+	private double valor;
 	private Vehiculo vehiculo;
 
 	public TicketParqueadero(Date fechaIngreso, Vehiculo vehiculo) {
@@ -17,6 +19,22 @@ public class TicketParqueadero {
 
 	public void setFechaIngreso(Date fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
+	}
+
+	public Date getFechaSalida() {
+		return fechaSalida;
+	}
+
+	public void setFechaSalida(Date fechaSalida) {
+		this.fechaSalida = fechaSalida;
+	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
 	}
 
 	public Vehiculo getVehiculo() {

@@ -1,5 +1,7 @@
 package co.com.ceiba.estacionamiento.dominio.validaciones;
 
+import co.com.ceiba.estacionamiento.dominio.Vehiculo;
+
 public interface Validacion {
-	public Exception validar();
+	public void validar(Vehiculo vehiculo);
 }
