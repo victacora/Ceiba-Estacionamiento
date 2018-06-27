@@ -2,6 +2,7 @@ package co.com.ceiba.estacionamiento.persistencia.entidades;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,13 +19,13 @@ public class VehiculoEntity {
 	@Column(length=8)
 	private String placa;
 
-	@Column(name = "valor", nullable = true, precision = 12, scale = 2)
+	@Column(name = "cilindraje", nullable = true, precision = 12, scale = 2)
 	private double cilindraje;
 
 	@Column(name = "tipo_vehiculo")
 	private String tipoVehiculo;
 
-	@OneToMany(mappedBy = "vehiculo", targetEntity = TicketParqueaderoEntity.class, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "vehiculo", cascade =  CascadeType.ALL,targetEntity = TicketParqueaderoEntity.class, fetch = FetchType.LAZY)
 	private List<TicketParqueaderoEntity> ticketParqueaderos;
 
 	public String getPlaca() {

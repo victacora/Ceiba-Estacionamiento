@@ -29,11 +29,8 @@ public class TicketParqueaderoEntity {
 	@Column(name = "valor", nullable = true, precision = 12, scale = 2)
 	private double valor;
 
-	@Column(length=8)
-	private String placa;
-
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "placa", referencedColumnName = "placa")
+	@ManyToOne
+	@JoinColumn(name = "placa")
 	private VehiculoEntity vehiculo;
 
 	public Long getId() {
@@ -66,14 +63,6 @@ public class TicketParqueaderoEntity {
 
 	public void setValor(double valor) {
 		this.valor = valor;
-	}
-
-	public String getPlaca() {
-		return placa;
-	}
-
-	public void setPlaca(String placa) {
-		this.placa = placa;
 	}
 
 	public VehiculoEntity getVehiculo() {

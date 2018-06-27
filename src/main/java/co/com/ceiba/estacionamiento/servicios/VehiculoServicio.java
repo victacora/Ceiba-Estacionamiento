@@ -9,7 +9,7 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.dominio.servicios.IVehiculoServicio;
 import co.com.ceiba.estacionamiento.persistencia.builders.VehiculoBuilder;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
-import co.com.ceiba.estacionamiento.persistencia.repositorio.jpa.IVehiculoRepositorio;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.IVehiculoRepositorio;
 
 @Service
 public class VehiculoServicio implements IVehiculoServicio {

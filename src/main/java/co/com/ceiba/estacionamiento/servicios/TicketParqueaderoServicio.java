@@ -7,7 +7,7 @@ import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.servicios.ITicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.persistencia.builders.TicketParqueaderoBuilder;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
-import co.com.ceiba.estacionamiento.persistencia.repositorio.jpa.ITicketParqueaderoRepositorio;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.ITicketParqueaderoRepositorio;
 
 @Service
 public class TicketParqueaderoServicio implements ITicketParqueaderoServicio {

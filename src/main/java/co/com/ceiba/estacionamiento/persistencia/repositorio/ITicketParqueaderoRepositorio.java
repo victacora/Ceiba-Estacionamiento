@@ -1,4 +1,4 @@
-package co.com.ceiba.estacionamiento.persistencia.repositorio.jpa;
+package co.com.ceiba.estacionamiento.persistencia.repositorio;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,9 +10,9 @@ import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEnti
 @Repository
 public interface  ITicketParqueaderoRepositorio  extends CrudRepository<TicketParqueaderoEntity, Long> {
 	
-	@Query("SELECT COUNT(*) FROM TicketParqueadero t  WHERE t.tipoVehiculo=:tipoVehiculo")
+	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t JOIN vehiculo v ON t.placa=v.placa WHERE v.tipo_vehiculo=:tipoVehiculo", nativeQuery = true)
 	public Integer verificarCupoVehiculo(@Param("tipoVehiculo")String tipoVehiculo);
 	
-	@Query("SELECT COUNT(*) FROM TicketParqueadero t  WHERE t.placa=:placa AND t.fechaSalida IS NOT NULL")
+	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NOT NULL", nativeQuery = true)
 	public Integer verificarIngresoVehiculo(@Param("placa") String placa);
 }

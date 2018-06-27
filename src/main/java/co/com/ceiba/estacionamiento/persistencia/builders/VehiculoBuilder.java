@@ -23,7 +23,7 @@ public class VehiculoBuilder {
 	}
 
 	public static VehiculoEntity convertirAEntity(Vehiculo vehiculo) {
-		VehiculoEntity vehiculoEntity = null;
+		VehiculoEntity vehiculoEntity = new VehiculoEntity();
 		if (vehiculo != null) {
 			vehiculoEntity = new VehiculoEntity();
 			vehiculoEntity.setPlaca(vehiculo.getPlaca());
@@ -31,6 +31,7 @@ public class VehiculoBuilder {
 				vehiculoEntity.setCilindraje(((Moto) vehiculo).getCilindraje());
 				vehiculoEntity.setTipoVehiculo(EnumTipoVehiculo.MOTO.name());
 			} else {
+				vehiculoEntity.setCilindraje(0);
 				vehiculoEntity.setTipoVehiculo(EnumTipoVehiculo.CARRO.name());
 			}
 		}

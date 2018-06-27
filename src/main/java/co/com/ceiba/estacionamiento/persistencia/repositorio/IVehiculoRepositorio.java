@@ -1,4 +1,4 @@
-package co.com.ceiba.estacionamiento.persistencia.repositorio.jpa;
+package co.com.ceiba.estacionamiento.persistencia.repositorio;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

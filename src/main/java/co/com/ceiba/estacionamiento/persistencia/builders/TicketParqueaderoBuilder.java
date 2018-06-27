@@ -1,16 +1,18 @@
 package co.com.ceiba.estacionamiento.persistencia.builders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
 public class TicketParqueaderoBuilder {
-	
-	
+
 	private TicketParqueaderoBuilder() {
-	    throw new IllegalStateException("Clase utilidad");
-	  }
+		throw new IllegalStateException("Clase utilidad");
+	}
 
 	public static TicketParqueadero convertirADominio(TicketParqueaderoEntity ticketParqueaderoEntity) {
 		TicketParqueadero ticketParqueadero = null;
@@ -30,7 +32,13 @@ public class TicketParqueaderoBuilder {
 			ticketParqueaderoEntity.setFechaIngreso(ticketParqueadero.getFechaIngreso());
 			ticketParqueaderoEntity.setFechaSalida(ticketParqueadero.getFechaSalida());
 			ticketParqueaderoEntity.setValor(ticketParqueadero.getValor());
+			
 			VehiculoEntity vehiculoEntity = VehiculoBuilder.convertirAEntity(ticketParqueadero.getVehiculo());
+			
+			List<TicketParqueaderoEntity> ticketParqueaderoEntities = new ArrayList<>();
+			ticketParqueaderoEntities.add(ticketParqueaderoEntity);
+			vehiculoEntity.setTicketParqueaderos(ticketParqueaderoEntities);
+			
 			ticketParqueaderoEntity.setVehiculo(vehiculoEntity);
 		}
 		return ticketParqueaderoEntity;
