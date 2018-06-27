@@ -1,8 +1,8 @@
-package co.com.ceiba.estacionamiento.dominio.repositorio;
+package co.com.ceiba.estacionamiento.dominio.servicios;
 
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 
-public interface TicketParqueaderoRepositorio {
+public interface ITicketParqueaderoServicio {
 
 		public Integer verificarCupoVehiculo(String tipoVehiculo);
 	

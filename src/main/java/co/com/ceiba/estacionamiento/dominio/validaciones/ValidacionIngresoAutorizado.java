@@ -5,7 +5,7 @@ import java.util.Calendar;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 
-public class ValidacionIngresoAutorizado implements Validacion {
+public class ValidacionIngresoAutorizado implements IValidacion {
 
 	@Override
 	public void validar(Vehiculo vehiculo) {

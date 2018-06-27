@@ -1,5 +1,5 @@
 package co.com.ceiba.estacionamiento.enumeraciones;
 
-public enum TipoVehiculo {
+public enum EnumTipoVehiculo {
 	CARRO,MOTO
 }

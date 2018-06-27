@@ -6,21 +6,21 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
-import co.com.ceiba.estacionamiento.dominio.repositorio.TicketParqueaderoRepositorio;
+import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
 public class ParqueaderoTest {
 
-	private TicketParqueaderoRepositorio ticketParqueaderoRepositorio;
+	private TicketParqueaderoServicio ticketParqueaderoServicio;
 
 	@Before
 	public void setUp() {
-		ticketParqueaderoRepositorio = Mockito.mock(TicketParqueaderoRepositorio.class);
-		Mockito.when(ticketParqueaderoRepositorio.crearTicketParqueadero(Mockito.any())).thenReturn(true);
-		Mockito.when(ticketParqueaderoRepositorio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(0);
-		Mockito.when(ticketParqueaderoRepositorio.verificarIngresoVehiculo(Mockito.anyString())).thenReturn(0);
+		ticketParqueaderoServicio = Mockito.mock(TicketParqueaderoServicio.class);
+		Mockito.when(ticketParqueaderoServicio.crearTicketParqueadero(Mockito.any())).thenReturn(true);
+		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(0);
+		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString())).thenReturn(0);
 
 	}
 
@@ -28,7 +28,7 @@ public class ParqueaderoTest {
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
 
-		Vigilante vigilante = new Vigilante(ticketParqueaderoRepositorio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio);
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 
@@ -40,7 +40,7 @@ public class ParqueaderoTest {
 
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
 
-		Vigilante vigilante = new Vigilante(ticketParqueaderoRepositorio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio);
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 

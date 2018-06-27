@@ -6,6 +6,6 @@ import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
 
 
-public interface  VehiculoRepositorioJPA  extends CrudRepository<VehiculoEntity, String> {
+public interface  IVehiculoRepositorio  extends CrudRepository<VehiculoEntity, String> {
 
 }
