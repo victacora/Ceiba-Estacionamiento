@@ -1,8 +1,5 @@
 package co.com.ceiba.estacionamiento.persistencia.builders;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
@@ -32,13 +29,8 @@ public class TicketParqueaderoBuilder {
 			ticketParqueaderoEntity.setFechaIngreso(ticketParqueadero.getFechaIngreso());
 			ticketParqueaderoEntity.setFechaSalida(ticketParqueadero.getFechaSalida());
 			ticketParqueaderoEntity.setValor(ticketParqueadero.getValor());
-			
 			VehiculoEntity vehiculoEntity = VehiculoBuilder.convertirAEntity(ticketParqueadero.getVehiculo());
-			
-			List<TicketParqueaderoEntity> ticketParqueaderoEntities = new ArrayList<>();
-			ticketParqueaderoEntities.add(ticketParqueaderoEntity);
-			vehiculoEntity.setTicketParqueaderos(ticketParqueaderoEntities);
-			
+			vehiculoEntity.agregarTicket(ticketParqueaderoEntity);
 			ticketParqueaderoEntity.setVehiculo(vehiculoEntity);
 		}
 		return ticketParqueaderoEntity;

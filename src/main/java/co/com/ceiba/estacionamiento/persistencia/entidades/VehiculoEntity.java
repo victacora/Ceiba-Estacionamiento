@@ -1,5 +1,6 @@
 package co.com.ceiba.estacionamiento.persistencia.entidades;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -60,5 +61,10 @@ public class VehiculoEntity {
 		this.ticketParqueaderos = ticketParqueaderos;
 	}
 
+	public void agregarTicket(TicketParqueaderoEntity ticketParqueaderoEntity){
+		if(this.ticketParqueaderos==null) this.ticketParqueaderos= new ArrayList<>();
+		this.ticketParqueaderos.add(ticketParqueaderoEntity);
+		ticketParqueaderoEntity.setVehiculo(this);
+	}
 	
 }
