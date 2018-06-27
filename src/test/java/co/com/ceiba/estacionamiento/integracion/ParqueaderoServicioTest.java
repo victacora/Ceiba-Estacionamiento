@@ -14,7 +14,7 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ParqueaderoRepositorioTest {
+public class ParqueaderoServicioTest {
 
 	@Autowired
 	TicketParqueaderoServicio ticketParqueaderoServicio;
