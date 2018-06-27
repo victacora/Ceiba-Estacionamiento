@@ -1,33 +1,24 @@
-package co.com.ceiba.estacionamiento.unitarias;
+package co.com.ceiba.estacionamiento.integracion;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
-import co.com.ceiba.estacionamiento.dominio.repositorio.TicketParqueaderoRepositorio;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.TicketParqueaderoRepositorioPersitencia;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
-public class ParqueaderoTest {
 
-	private TicketParqueaderoRepositorio ticketParqueaderoRepositorio;
+public class ParqueaderoRepositorioTest {
 
-	@Before
-	public void setUp() {
-		ticketParqueaderoRepositorio = Mockito.mock(TicketParqueaderoRepositorio.class);
-		Mockito.when(ticketParqueaderoRepositorio.crearTicketParqueadero(Mockito.any())).thenReturn(true);
-		Mockito.when(ticketParqueaderoRepositorio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(0);
-		Mockito.when(ticketParqueaderoRepositorio.verificarIngresoVehiculo(Mockito.anyString())).thenReturn(0);
-
-	}
+	@Autowired
+	TicketParqueaderoRepositorioPersitencia ticketParqueaderoRepositorio;
 
 	@Test
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
-
 		Vigilante vigilante = new Vigilante(ticketParqueaderoRepositorio);
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
@@ -39,7 +30,6 @@ public class ParqueaderoTest {
 	public void IngresarMoto() {
 
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
-
 		Vigilante vigilante = new Vigilante(ticketParqueaderoRepositorio);
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);

@@ -12,6 +12,13 @@ public class TicketParqueadero {
 		this.fechaIngreso = fechaIngreso;
 		this.vehiculo = vehiculo;
 	}
+	
+	public TicketParqueadero(Date fechaIngreso,Date fechaSalida,double valor, Vehiculo vehiculo) {
+		this.fechaIngreso = fechaIngreso;
+		this.fechaSalida=fechaSalida;
+		this.valor=valor;
+		this.vehiculo = vehiculo;
+	}
 
 	public Date getFechaIngreso() {
 		return fechaIngreso;

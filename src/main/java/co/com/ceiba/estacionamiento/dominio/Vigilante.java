@@ -4,32 +4,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import co.com.ceiba.estacionamiento.dominio.repositorio.TicketParqueaderoRepositorio;
 import co.com.ceiba.estacionamiento.dominio.validaciones.Validacion;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionCupo;
-import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionPlacaAccesoRestringido;
+import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionIngresoAutorizado;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoRegistrado;
-import co.com.ceiba.estacionamiento.persistencia.repositorio.RepositorioTicketParqueadero;
 
 public class Vigilante {
 
 	public static final int NUMERO_MAXIMO_CUPOS_CARRO = 20;
 	public static final int NUMERO_MAXIMO_CUPOS_MOTO = 10;
+	public static final int VEHICULO_NO_REGISTRADO = 0;
 	List<Validacion> validaciones;
 
-	private RepositorioTicketParqueadero repositorioTicketParqueadero;
+	private TicketParqueaderoRepositorio ticketParqueaderoRepositorio;
 
-	public Vigilante(RepositorioTicketParqueadero repositorioTicketParqueadero) {
-		this.repositorioTicketParqueadero = repositorioTicketParqueadero;
+	public Vigilante(TicketParqueaderoRepositorio repositorioTicketParqueadero) {
+		this.ticketParqueaderoRepositorio = repositorioTicketParqueadero;
 		validaciones = new ArrayList<>();
-		validaciones.add(new ValidacionCupo(this.repositorioTicketParqueadero));
-		validaciones.add(new ValidacionPlacaAccesoRestringido());
-		validaciones.add(new ValidacionVehiculoRegistrado(this.repositorioTicketParqueadero));
+		validaciones.add(new ValidacionCupo(this.ticketParqueaderoRepositorio));
+		validaciones.add(new ValidacionIngresoAutorizado());
+		validaciones.add(new ValidacionVehiculoRegistrado(this.ticketParqueaderoRepositorio));
 	}
 
-	public TicketParqueadero ingresarVehiculo(Vehiculo vehiculo) {
+	public boolean ingresarVehiculo(Vehiculo vehiculo) {
 		for (Validacion validacion : validaciones) {
 			validacion.validar(vehiculo);
 		}
-		return new TicketParqueadero(new Date(), vehiculo);
+		return ticketParqueaderoRepositorio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
 	}
 }

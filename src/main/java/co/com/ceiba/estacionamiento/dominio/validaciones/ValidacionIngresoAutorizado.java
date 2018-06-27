@@ -3,9 +3,9 @@ package co.com.ceiba.estacionamiento.dominio.validaciones;
 import java.util.Calendar;
 
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
-import co.com.ceiba.estacionamiento.dominio.excepciones.PlacaAccesoRestringidoException;
+import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 
-public class ValidacionPlacaAccesoRestringido implements Validacion {
+public class ValidacionIngresoAutorizado implements Validacion {
 
 	@Override
 	public void validar(Vehiculo vehiculo) {
@@ -14,7 +14,7 @@ public class ValidacionPlacaAccesoRestringido implements Validacion {
 			Calendar cal = Calendar.getInstance();
 			int diaActual = cal.get(Calendar.DAY_OF_WEEK);
 			if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
-				throw new PlacaAccesoRestringidoException("No esta autorizado para ingresar");
+				throw new AccesoRestringidoException("No esta autorizado para ingresar");
 			}
 		}
 	}

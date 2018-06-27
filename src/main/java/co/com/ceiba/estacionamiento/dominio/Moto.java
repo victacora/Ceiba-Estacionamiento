@@ -1,10 +1,21 @@
 package co.com.ceiba.estacionamiento.dominio;
 
-import co.com.ceiba.estacionamiento.enumeraciones.TipoVehiculo;
-
 public class Moto extends Vehiculo {
-		
-	public Moto(String placa, double cilindraje, TipoVehiculo carro) {
-		super(placa,cilindraje,carro);
+	private double cilindraje;
+	
+	public Moto(String placa, double cilindraje) {
+		super(placa);
+		this.cilindraje=cilindraje;
 	}
+
+	public double getCilindraje() {
+		return cilindraje;
+	}
+
+	public void setCilindraje(double cilindraje) {
+		this.cilindraje = cilindraje;
+	}
+
+
+	
 }

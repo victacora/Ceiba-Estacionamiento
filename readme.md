@@ -1,4 +1,4 @@
-Problema
+##Problema
 
 Consiste en un sistema que simula el comportamiento del vigilante de un parqueadero, las reglas de negocio son las siguientes:
 
@@ -18,7 +18,7 @@ EJEMPLOS:
 *Si el carro permaneció un día y 3 horas se debe cobrar 11.000
 *Si la moto permaneció un 10 horas y es de 650CC se cobra 6.000
 
-Requerimientos no funcionales
+##Requerimientos no funcionales
 
 La aplicación debe ser construida para la Web
 La interfaz gráfica Web se debe adaptar a los celulares
