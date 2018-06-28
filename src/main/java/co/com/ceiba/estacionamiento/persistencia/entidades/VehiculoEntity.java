@@ -21,7 +21,7 @@ public class VehiculoEntity {
 	@Column(name = "cilindraje", nullable = true, precision = 12, scale = 2)
 	private double cilindraje;
 
-	@Column(name = "tipo_vehiculo")
+	@Column(name = "tipo_vehiculo",length = 5)
 	private String tipoVehiculo;
 
 	@OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
