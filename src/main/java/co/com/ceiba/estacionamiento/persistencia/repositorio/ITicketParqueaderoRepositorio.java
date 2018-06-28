@@ -13,6 +13,6 @@ public interface  ITicketParqueaderoRepositorio  extends CrudRepository<TicketPa
 	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t JOIN vehiculo v ON t.placa=v.placa WHERE v.tipo_vehiculo=:tipoVehiculo", nativeQuery = true)
 	public Integer verificarCupoVehiculo(@Param("tipoVehiculo")String tipoVehiculo);
 	
-	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NOT NULL", nativeQuery = true)
+	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NULL", nativeQuery = true)
 	public Integer verificarIngresoVehiculo(@Param("placa") String placa);
 }

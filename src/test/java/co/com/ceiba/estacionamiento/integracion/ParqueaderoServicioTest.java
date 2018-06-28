@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
 import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
+import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
@@ -20,10 +21,13 @@ public class ParqueaderoServicioTest {
 	@Autowired
 	TicketParqueaderoServicio ticketParqueaderoServicio;
 
+	@Autowired
+	VehiculoServicio vehiculoServicio;
+
 	@Test
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio,vehiculoServicio);
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 
@@ -34,7 +38,7 @@ public class ParqueaderoServicioTest {
 	public void IngresarMoto() {
 
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio,vehiculoServicio);
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 

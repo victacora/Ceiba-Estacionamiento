@@ -1,23 +1,21 @@
 package co.com.ceiba.estacionamiento.persistencia.entidades;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-@Entity(name="Vehiculo")
-@Table(name="vehiculo")
+@Entity(name = "Vehiculo")
+@Table(name = "vehiculo")
 public class VehiculoEntity {
 
 	@Id
-	@Column(length=8)
+	@Column(length = 8)
 	private String placa;
 
 	@Column(name = "cilindraje", nullable = true, precision = 12, scale = 2)
@@ -26,8 +24,8 @@ public class VehiculoEntity {
 	@Column(name = "tipo_vehiculo")
 	private String tipoVehiculo;
 
-	@OneToMany(mappedBy = "vehiculo", cascade =  CascadeType.ALL,targetEntity = TicketParqueaderoEntity.class, fetch = FetchType.LAZY)
-	private List<TicketParqueaderoEntity> ticketParqueaderos;
+	@OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
+	private Set<TicketParqueaderoEntity> ticketParqueaderos;
 
 	public String getPlaca() {
 		return placa;
@@ -53,18 +51,19 @@ public class VehiculoEntity {
 		this.tipoVehiculo = tipoVehiculo;
 	}
 
-	public List<TicketParqueaderoEntity> getTicketParqueaderos() {
+	public Set<TicketParqueaderoEntity> getTicketParqueaderos() {
 		return ticketParqueaderos;
 	}
 
-	public void setTicketParqueaderos(List<TicketParqueaderoEntity> ticketParqueaderos) {
+	public void setTicketParqueaderos(Set<TicketParqueaderoEntity> ticketParqueaderos) {
 		this.ticketParqueaderos = ticketParqueaderos;
 	}
 
-	public void agregarTicket(TicketParqueaderoEntity ticketParqueaderoEntity){
-		if(this.ticketParqueaderos==null) this.ticketParqueaderos= new ArrayList<>();
+	public void agregarTicket(TicketParqueaderoEntity ticketParqueaderoEntity) {
+		if (this.ticketParqueaderos == null)
+			this.ticketParqueaderos = new HashSet<>();
 		this.ticketParqueaderos.add(ticketParqueaderoEntity);
 		ticketParqueaderoEntity.setVehiculo(this);
 	}
-	
+
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import co.com.ceiba.estacionamiento.dominio.servicios.ITicketParqueaderoServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.IVehiculoServicio;
 import co.com.ceiba.estacionamiento.dominio.validaciones.IValidacion;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionCupo;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionIngresoAutorizado;
@@ -18,9 +19,11 @@ public class Vigilante {
 	List<IValidacion> validaciones;
 
 	private ITicketParqueaderoServicio ticketParqueaderoServicio;
+	private IVehiculoServicio vehiculoServicio;
 
-	public Vigilante(ITicketParqueaderoServicio ticketParqueaderoServicio) {
+	public Vigilante(ITicketParqueaderoServicio ticketParqueaderoServicio, IVehiculoServicio vehiculoServicio) {
 		this.ticketParqueaderoServicio = ticketParqueaderoServicio;
+		this.vehiculoServicio = vehiculoServicio;
 		validaciones = new ArrayList<>();
 		validaciones.add(new ValidacionCupo(this.ticketParqueaderoServicio));
 		validaciones.add(new ValidacionIngresoAutorizado());
@@ -31,6 +34,11 @@ public class Vigilante {
 		for (IValidacion validacion : validaciones) {
 			validacion.validar(vehiculo);
 		}
+		
+		if (vehiculoServicio.obtenerVehiculo(vehiculo.getPlaca()) == null) {
+			vehiculoServicio.crearVehiculo(vehiculo);
+		}
+
 		return ticketParqueaderoServicio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
 	}
 }

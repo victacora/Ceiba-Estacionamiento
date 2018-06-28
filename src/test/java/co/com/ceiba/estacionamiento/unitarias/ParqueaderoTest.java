@@ -6,7 +6,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
+import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
 import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
+import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
@@ -14,6 +16,7 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 public class ParqueaderoTest {
 
 	private TicketParqueaderoServicio ticketParqueaderoServicio;
+	private VehiculoServicio vehiculoServicio;
 
 	@Before
 	public void setUp() {
@@ -22,13 +25,15 @@ public class ParqueaderoTest {
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(0);
 		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString())).thenReturn(0);
 
+		vehiculoServicio = Mockito.mock(VehiculoServicio.class);
+		Mockito.when(vehiculoServicio.crearVehiculo(Mockito.any())).thenReturn(true);
+		Mockito.when(vehiculoServicio.obtenerVehiculo(Mockito.anyString())).thenReturn(new Vehiculo("xxx-222"));
 	}
 
 	@Test
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
-
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio);
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 
@@ -37,24 +42,32 @@ public class ParqueaderoTest {
 
 	@Test
 	public void IngresarMoto() {
-
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
-
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio);
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 
 		Assert.assertTrue("La moto no pudo ser ingresada.", resultado);
 	}
 
-	@Test
+	@Test(expected = CupoExcedidoException.class)
 	public void ValidarCuposCarroMax20() {
-		Assert.assertTrue(true);
+		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
+				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_CARRO + 1);
+		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XZX-225").build();
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio);
+		
+		vigilante.ingresarVehiculo(carro);
 	}
 
-	@Test
+	@Test(expected = CupoExcedidoException.class)
 	public void ValidarCuposMotoMax10() {
-		Assert.assertTrue(true);
+		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
+				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_MOTO + 1);
+		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(200).withPlaca("YTY-223").build();
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio);
+		
+		vigilante.ingresarVehiculo(moto);
 	}
 
 	@Test
