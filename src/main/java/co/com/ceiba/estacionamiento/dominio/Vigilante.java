@@ -17,6 +17,9 @@ public class Vigilante {
 	public static final int NUMERO_MAXIMO_CUPOS_MOTO = 10;
 	public static final int VEHICULO_NO_REGISTRADO = 0;
 	private static final double MIN_CILINDRAJE_MOTO_COSTO_ADICIONAL = 500;
+	private static final int TOTAL_MILISEGUNDOS_EN_UNA_HORA = 1000 * 60 * 60;
+	private static final int TOTAL_HORAS_EN_UN_DIA = 24;
+	private static final int MIN_HORAS_POR_DIA = 9;
 
 	List<IValidacion> validaciones;
 
@@ -60,8 +63,17 @@ public class Vigilante {
 
 	public double calcularValorAPagar(TicketParqueadero ticketParqueadero) {
 		double valor;
-		int totalDias = 0;
-		int totalHoras = 0;
+
+		int totalHorasTranscurridas = (int) (ticketParqueadero.getFechaSalida().getTime()
+				- ticketParqueadero.getFechaIngreso().getTime()) / TOTAL_MILISEGUNDOS_EN_UNA_HORA;
+		int totalDias = totalHorasTranscurridas / TOTAL_HORAS_EN_UN_DIA;
+		int totalHoras = totalHorasTranscurridas % TOTAL_HORAS_EN_UN_DIA;
+
+		if(totalHoras>MIN_HORAS_POR_DIA){
+			totalHoras=0;
+			totalDias=totalDias+1;
+		}
+		
 		if (ticketParqueadero.getVehiculo() instanceof Moto) {
 			Moto moto = (Moto) ticketParqueadero.getVehiculo();
 
@@ -70,6 +82,7 @@ public class Vigilante {
 							EnumUnidadTiempo.DIA.name())
 					+ totalHoras * tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.MOTO.name(),
 							EnumTipoTarifa.TIEMPO.name(), EnumUnidadTiempo.HORA.name());
+			
 			if (moto.getCilindraje() > MIN_CILINDRAJE_MOTO_COSTO_ADICIONAL)
 				valor = valor + tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.MOTO.name(),
 						EnumTipoTarifa.ADICIONAL.name(), EnumUnidadTiempo.NOAPLICA.name());

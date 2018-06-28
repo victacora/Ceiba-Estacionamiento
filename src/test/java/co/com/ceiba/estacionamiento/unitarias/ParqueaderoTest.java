@@ -1,5 +1,7 @@
 package co.com.ceiba.estacionamiento.unitarias;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -20,15 +22,25 @@ import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionIngresoAutori
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoNoEncontrado;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoNoRegistrado;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoRegistrado;
+import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
+import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
+import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
 import co.com.ceiba.estacionamiento.servicios.TarifaServicio;
 import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
+import co.com.ceiba.estacionamiento.testdatabuilder.TicketParqueaderoTestDataBuilder;
+import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
 public class ParqueaderoTest {
 
+	private static final double VALOR_HORA_CARRO = 1000;
+	private static final double VALOR_DIA_CARRO = 8000;
+	private static final double VALOR_HORA_MOTO = 500;
+	private static final double VALOR_DIA_MOTO = 4000;
+	private static final double VALOR_ADICIONAL_MOTO = 2000;
 	private TicketParqueaderoServicio ticketParqueaderoServicio;
 	private VehiculoServicio vehiculoServicio;
 	private TarifaServicio TarifaServicio;
@@ -64,6 +76,42 @@ public class ParqueaderoTest {
 		Mockito.when(vehiculoServicio.obtenerVehiculo(Mockito.anyString())).thenReturn(vehiculo);
 
 		TarifaServicio = Mockito.mock(TarifaServicio.class);
+		Mockito.doAnswer(new Answer<Double>() {
+			@Override
+			public Double answer(InvocationOnMock invocation) throws Throwable {
+				Double valor = 0.0;
+				Object[] args = invocation.getArguments();
+				String tipoVehiculo =  args[0].toString();
+				String tipoTarifa =  args[1].toString();
+				String unidadTiempo =  args[2].toString();
+				if (tipoVehiculo.equals(EnumTipoVehiculo.CARRO.name())&&
+						tipoTarifa.equals(EnumTipoTarifa.TIEMPO.name())&&
+								unidadTiempo.equals(EnumUnidadTiempo.HORA.name())){
+					valor=VALOR_HORA_CARRO;
+				}
+				else if (tipoVehiculo.equals(EnumTipoVehiculo.CARRO.name())&&
+						tipoTarifa.equals(EnumTipoTarifa.TIEMPO.name())&&
+								unidadTiempo.equals(EnumUnidadTiempo.DIA.name())){
+					valor=VALOR_DIA_CARRO;
+				}
+				else if (tipoVehiculo.equals(EnumTipoVehiculo.MOTO.name())&&
+						tipoTarifa.equals(EnumTipoTarifa.TIEMPO.name())&&
+								unidadTiempo.equals(EnumUnidadTiempo.HORA.name())){
+					valor=VALOR_HORA_MOTO;
+				}
+				else if (tipoVehiculo.equals(EnumTipoVehiculo.MOTO.name())&&
+						tipoTarifa.equals(EnumTipoTarifa.TIEMPO.name())&&
+								unidadTiempo.equals(EnumUnidadTiempo.DIA.name())){
+					valor=VALOR_DIA_MOTO;
+				}
+				else if (tipoVehiculo.equals(EnumTipoVehiculo.MOTO.name())&&
+						tipoTarifa.equals(EnumTipoTarifa.ADICIONAL.name())&&
+								unidadTiempo.equals(EnumUnidadTiempo.NOAPLICA.name())){
+					valor=VALOR_ADICIONAL_MOTO;
+				}
+				return valor;
+			}
+		}).when(TarifaServicio).obtenerValorTarifa(Mockito.anyString(),Mockito.anyString(),Mockito.anyString());
 	}
 
 	@Test
@@ -137,30 +185,77 @@ public class ParqueaderoTest {
 	@Test
 	public void ValidarCobroHoraCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
+		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		TicketParqueadero ticketParqueadero=null;
 		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validacionesSalidaVehiculo());
-		vigilante.ingresarVehiculo(carro);
-		boolean resultado=vigilante.retirarVehiculo(carro.getPlaca());
-		Assert.assertTrue("El carro se retiro correctamente.",resultado);
+		try {
+			 ticketParqueadero=new TicketParqueaderoTestDataBuilder().withVehiculo(carro).withFechaIngreso(formatoFecha.parse("28/06/2018 12:00")).withFechaSalida(formatoFecha.parse("28/06/2018 13:00")).build();
+			} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		double valor=vigilante.calcularValorAPagar(ticketParqueadero);
+		Assert.assertEquals(VALOR_HORA_CARRO,valor,0.0);
 	}
 
 	@Test
 	public void ValidarCobroDiaCarro() {
-		Assert.assertTrue(true);
+		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
+		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		TicketParqueadero ticketParqueadero=null;
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validacionesSalidaVehiculo());
+		try {
+			 ticketParqueadero=new TicketParqueaderoTestDataBuilder().withVehiculo(carro).withFechaIngreso(formatoFecha.parse("28/06/2018 00:00")).withFechaSalida(formatoFecha.parse("29/06/2018 00:00")).build();
+			} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		double valor=vigilante.calcularValorAPagar(ticketParqueadero);
+		Assert.assertEquals(VALOR_DIA_CARRO,valor,0.0);
 	}
 
 	@Test
 	public void ValidarCobroHoraMoto() {
-		Assert.assertTrue(true);
+		Vehiculo moto = new MotoTestDataBuilder().withPlaca("AZX-225").withCilindraje(200).build();
+		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		TicketParqueadero ticketParqueadero=null;
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validacionesSalidaVehiculo());
+		try {
+			 ticketParqueadero=new TicketParqueaderoTestDataBuilder().withVehiculo(moto).withFechaIngreso(formatoFecha.parse("28/06/2018 12:00")).withFechaSalida(formatoFecha.parse("28/06/2018 13:00")).build();
+			} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		double valor=vigilante.calcularValorAPagar(ticketParqueadero);
+		Assert.assertEquals(VALOR_HORA_MOTO,valor,0.0);
 	}
 
 	@Test
 	public void ValidarCobroDiaMoto() {
-		Assert.assertTrue(true);
+		Vehiculo moto = new MotoTestDataBuilder().withPlaca("AZX-225").withCilindraje(200).build();
+		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		TicketParqueadero ticketParqueadero=null;
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validacionesSalidaVehiculo());
+		try {
+			 ticketParqueadero=new TicketParqueaderoTestDataBuilder().withVehiculo(moto).withFechaIngreso(formatoFecha.parse("28/06/2018 00:00")).withFechaSalida(formatoFecha.parse("29/06/2018 00:00")).build();
+			} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		double valor=vigilante.calcularValorAPagar(ticketParqueadero);
+		Assert.assertEquals(VALOR_DIA_MOTO,valor,0.0);
 	}
 
 	@Test
 	public void ValidarCobroMotoCilindrajeMayor500CC() {
-		Assert.assertTrue(true);
+		Vehiculo moto = new MotoTestDataBuilder().withPlaca("AZX-225").withCilindraje(650).build();
+		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		TicketParqueadero ticketParqueadero=null;
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validacionesSalidaVehiculo());
+		try {
+			 ticketParqueadero=new TicketParqueaderoTestDataBuilder().withVehiculo(moto).withFechaIngreso(formatoFecha.parse("28/06/2018 12:00")).withFechaSalida(formatoFecha.parse("28/06/2018 13:00")).build();
+			} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		double valor=vigilante.calcularValorAPagar(ticketParqueadero);
+		Assert.assertEquals((VALOR_HORA_MOTO+VALOR_ADICIONAL_MOTO),valor,0.0);
+
 	}
 
 	@Test
