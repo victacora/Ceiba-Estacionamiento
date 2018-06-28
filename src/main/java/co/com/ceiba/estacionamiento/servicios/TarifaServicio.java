@@ -19,7 +19,7 @@ public class TarifaServicio implements ITarifaServicio {
 
 	@Override
 	public double obtenerValorTarifa(String tipoVehiculo, String tipoTarifa, String unidadTiempo) {
-		Optional<TarifaEntity> tarifa=tarifaRepositorio.findById( new TarifaId(tipoVehiculo,tipoTarifa,unidadTiempo));
+		Optional<TarifaEntity> tarifa=tarifaRepositorio.findById(new TarifaId(tipoVehiculo,tipoTarifa,unidadTiempo));
 		return (tarifa.isPresent() ? tarifa.get().getValor() : 0.0);
 	
 	}

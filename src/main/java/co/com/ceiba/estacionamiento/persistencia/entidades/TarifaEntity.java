@@ -5,8 +5,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Entity(name = "Tarifario")
-@Table(name = "tarifario")
+@Entity(name = "Tarifa")
+@Table(name = "tarifa")
 public class TarifaEntity {
 
 	@EmbeddedId
