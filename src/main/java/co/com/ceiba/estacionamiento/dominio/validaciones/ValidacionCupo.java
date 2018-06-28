@@ -21,13 +21,13 @@ public class ValidacionCupo implements IValidacion {
 			Integer totalCarrosIngresados = this.ticketParqueaderoServicio
 					.verificarCupoVehiculo(EnumTipoVehiculo.CARRO.name());
 			if (totalCarrosIngresados > Vigilante.NUMERO_MAXIMO_CUPOS_CARRO) {
-				throw new CupoExcedidoException("No hay cupos disponibles para carros");
+				throw new CupoExcedidoException("No hay cupos disponibles para carros.");
 			}
 		} else {
 			Integer totalMotosIngresadas = this.ticketParqueaderoServicio
 					.verificarCupoVehiculo(EnumTipoVehiculo.MOTO.name());
 			if (totalMotosIngresadas > Vigilante.NUMERO_MAXIMO_CUPOS_MOTO) {
-				throw new CupoExcedidoException("No hay cupos disponibles para motos");
+				throw new CupoExcedidoException("No hay cupos disponibles para motos.");
 			}
 
 		}

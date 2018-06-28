@@ -1,5 +1,7 @@
 package co.com.ceiba.estacionamiento.persistencia.repositorio;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +17,8 @@ public interface  ITicketParqueaderoRepositorio  extends CrudRepository<TicketPa
 	
 	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NULL", nativeQuery = true)
 	public Integer verificarIngresoVehiculo(@Param("placa") String placa);
+	
+
+	@Query(value="SELECT * FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NULL", nativeQuery = true)
+	public Optional<TicketParqueaderoEntity> obtenerTicketParqueaderoByPlaca(@Param("placa") String placa);
 }

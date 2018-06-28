@@ -1,5 +1,6 @@
 package co.com.ceiba.estacionamiento.dominio.servicios;
 
+
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 
 public interface ITicketParqueaderoServicio {
@@ -10,4 +11,8 @@ public interface ITicketParqueaderoServicio {
 		
 		public boolean crearTicketParqueadero(TicketParqueadero ticketParqueadero);
 		
+		public boolean actualizarTicketParqueadero(TicketParqueadero ticketParqueadero);
+
+		public TicketParqueadero obtenerTicketParquedero(String placa);
+
 }

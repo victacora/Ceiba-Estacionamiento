@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
 import co.com.ceiba.estacionamiento.dominio.validaciones.IValidacion;
+import co.com.ceiba.estacionamiento.servicios.TarifaServicio;
 import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
@@ -28,11 +29,14 @@ public class ParqueaderoServicioTest {
 
 	@Autowired
 	VehiculoServicio vehiculoServicio;
+	
+	@Autowired
+	TarifaServicio tarifaServicio;
 
 	@Test
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio,VALIDACIONES_POR_DEFECTO);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio,tarifaServicio,VALIDACIONES_POR_DEFECTO);
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 
@@ -43,7 +47,7 @@ public class ParqueaderoServicioTest {
 	public void IngresarMoto() {
 
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio,VALIDACIONES_POR_DEFECTO);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio,tarifaServicio,VALIDACIONES_POR_DEFECTO);
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 

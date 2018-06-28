@@ -15,7 +15,12 @@ import co.com.ceiba.estacionamiento.dominio.Vigilante;
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
 import co.com.ceiba.estacionamiento.dominio.validaciones.IValidacion;
+import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionCupo;
 import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionIngresoAutorizado;
+import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoNoEncontrado;
+import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoNoRegistrado;
+import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoRegistrado;
+import co.com.ceiba.estacionamiento.servicios.TarifaServicio;
 import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
@@ -24,10 +29,26 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
 public class ParqueaderoTest {
 
-	protected static final List<IValidacion> VALIDACIONES_POR_DEFECTO = null;
-
 	private TicketParqueaderoServicio ticketParqueaderoServicio;
 	private VehiculoServicio vehiculoServicio;
+	private TarifaServicio TarifaServicio;
+
+	private List<IValidacion> valiacionesIngresoVehiculo() {
+		List<IValidacion> validaciones = new ArrayList<>();
+		validaciones = new ArrayList<>();
+		validaciones.add(new ValidacionCupo(this.ticketParqueaderoServicio));
+		validaciones.add(new ValidacionIngresoAutorizado());
+		validaciones.add(new ValidacionVehiculoRegistrado(this.ticketParqueaderoServicio));
+		return validaciones;
+	}
+	
+	private List<IValidacion> validacionesSalidaVehiculo() {
+		List<IValidacion> validaciones = new ArrayList<>();
+		validaciones = new ArrayList<>();
+		validaciones.add(new ValidacionVehiculoNoEncontrado(this.vehiculoServicio));
+		validaciones.add(new ValidacionVehiculoNoRegistrado(this.ticketParqueaderoServicio));
+		return validaciones;
+	}
 
 	@Before
 	public void setUp() {
@@ -35,18 +56,21 @@ public class ParqueaderoTest {
 		Mockito.when(ticketParqueaderoServicio.crearTicketParqueadero(Mockito.any())).thenReturn(true);
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(0);
 		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString())).thenReturn(0);
- 
-		Vehiculo vehiculo=Mockito.mock(Vehiculo.class);
-		
+
+		Vehiculo vehiculo = Mockito.mock(Vehiculo.class);
+
 		vehiculoServicio = Mockito.mock(VehiculoServicio.class);
 		Mockito.when(vehiculoServicio.crearVehiculo(Mockito.any())).thenReturn(true);
 		Mockito.when(vehiculoServicio.obtenerVehiculo(Mockito.anyString())).thenReturn(vehiculo);
+
+		TarifaServicio = Mockito.mock(TarifaServicio.class);
 	}
 
 	@Test
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, VALIDACIONES_POR_DEFECTO);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
+				valiacionesIngresoVehiculo());
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 
@@ -56,7 +80,8 @@ public class ParqueaderoTest {
 	@Test
 	public void IngresarMoto() {
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, VALIDACIONES_POR_DEFECTO);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
+				valiacionesIngresoVehiculo());
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 
@@ -68,7 +93,8 @@ public class ParqueaderoTest {
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_CARRO + 1);
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XZX-225").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, VALIDACIONES_POR_DEFECTO);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
+				valiacionesIngresoVehiculo());
 
 		vigilante.ingresarVehiculo(carro);
 	}
@@ -78,7 +104,8 @@ public class ParqueaderoTest {
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_MOTO + 1);
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(200).withPlaca("YTY-223").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, VALIDACIONES_POR_DEFECTO);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
+				valiacionesIngresoVehiculo());
 
 		vigilante.ingresarVehiculo(moto);
 	}
@@ -91,7 +118,7 @@ public class ParqueaderoTest {
 			@Override
 			public Void answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
-				Vehiculo vehiculo=(Vehiculo)args[0];
+				Vehiculo vehiculo = (Vehiculo) args[0];
 				if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
 					int diaActual = Calendar.THURSDAY;
 					if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
@@ -103,13 +130,17 @@ public class ParqueaderoTest {
 		}).when(validacion).validar(Mockito.any(Vehiculo.class));
 		List<IValidacion> validaciones = new ArrayList<>();
 		validaciones.add(validacion);
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, validaciones);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validaciones);
 		vigilante.ingresarVehiculo(carro);
 	}
 
 	@Test
 	public void ValidarCobroHoraCarro() {
-		Assert.assertTrue(true);
+		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validacionesSalidaVehiculo());
+		vigilante.ingresarVehiculo(carro);
+		boolean resultado=vigilante.retirarVehiculo(carro.getPlaca());
+		Assert.assertTrue("El carro se retiro correctamente.",resultado);
 	}
 
 	@Test

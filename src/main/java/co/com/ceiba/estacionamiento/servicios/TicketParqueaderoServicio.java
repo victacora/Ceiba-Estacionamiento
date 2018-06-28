@@ -1,5 +1,7 @@
 package co.com.ceiba.estacionamiento.servicios;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,31 @@ public class TicketParqueaderoServicio implements ITicketParqueaderoServicio {
 	public boolean crearTicketParqueadero(TicketParqueadero ticketParqueadero) {
 		TicketParqueaderoEntity ticketParqueaderoEntity = TicketParqueaderoBuilder.convertirAEntity(ticketParqueadero);
 		return ticketParqueaderoRepositorio.save(ticketParqueaderoEntity) != null;
+	}
+
+	@Override
+	public boolean actualizarTicketParqueadero(TicketParqueadero ticketParqueadero) {
+		boolean isActualizado = false;
+		Optional<TicketParqueaderoEntity> ticketParqueaderoEntity = ticketParqueaderoRepositorio
+				.obtenerTicketParqueaderoByPlaca(ticketParqueadero.getVehiculo().getPlaca());
+		if (ticketParqueaderoEntity.isPresent()) {
+			TicketParqueaderoEntity actualizarTicketParqueadero = ticketParqueaderoEntity.get();
+			actualizarTicketParqueadero.setFechaSalida(ticketParqueadero.getFechaSalida());
+			actualizarTicketParqueadero.setValor(ticketParqueadero.getValor());
+			isActualizado = ticketParqueaderoRepositorio.save(actualizarTicketParqueadero) != null;
+		}
+		return isActualizado;
+	}
+
+	@Override
+	public TicketParqueadero obtenerTicketParquedero(String placa) {
+		TicketParqueadero ticketParqueadero = null;
+		Optional<TicketParqueaderoEntity> ticketParqueaderoEntity = ticketParqueaderoRepositorio
+				.obtenerTicketParqueaderoByPlaca(placa);
+		if (ticketParqueaderoEntity.isPresent()) {
+			ticketParqueadero = TicketParqueaderoBuilder.convertirADominio(ticketParqueaderoEntity.get());
+		}
+		return ticketParqueadero;
 	}
 
 }

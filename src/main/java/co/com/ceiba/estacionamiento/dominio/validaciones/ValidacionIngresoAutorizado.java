@@ -14,7 +14,7 @@ public class ValidacionIngresoAutorizado implements IValidacion {
 			Calendar cal = Calendar.getInstance();
 			int diaActual = cal.get(Calendar.DAY_OF_WEEK);
 			if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
-				throw new AccesoRestringidoException("No esta autorizado para ingresar");
+				throw new AccesoRestringidoException("No esta autorizado para ingresar.");
 			}
 		}
 	}
