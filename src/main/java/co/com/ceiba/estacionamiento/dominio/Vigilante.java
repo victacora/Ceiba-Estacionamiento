@@ -16,25 +16,32 @@ public class Vigilante {
 	public static final int NUMERO_MAXIMO_CUPOS_CARRO = 20;
 	public static final int NUMERO_MAXIMO_CUPOS_MOTO = 10;
 	public static final int VEHICULO_NO_REGISTRADO = 0;
+	
 	List<IValidacion> validaciones;
 
 	private ITicketParqueaderoServicio ticketParqueaderoServicio;
 	private IVehiculoServicio vehiculoServicio;
 
-	public Vigilante(ITicketParqueaderoServicio ticketParqueaderoServicio, IVehiculoServicio vehiculoServicio) {
+	public Vigilante(ITicketParqueaderoServicio ticketParqueaderoServicio, IVehiculoServicio vehiculoServicio,
+			List<IValidacion> validaciones) {
 		this.ticketParqueaderoServicio = ticketParqueaderoServicio;
 		this.vehiculoServicio = vehiculoServicio;
-		validaciones = new ArrayList<>();
-		validaciones.add(new ValidacionCupo(this.ticketParqueaderoServicio));
-		validaciones.add(new ValidacionIngresoAutorizado());
-		validaciones.add(new ValidacionVehiculoRegistrado(this.ticketParqueaderoServicio));
+		if (validaciones == null) {
+			this.validaciones = new ArrayList<>();
+			this.validaciones.add(new ValidacionCupo(this.ticketParqueaderoServicio));
+			this.validaciones.add(new ValidacionIngresoAutorizado());
+			this.validaciones.add(new ValidacionVehiculoRegistrado(this.ticketParqueaderoServicio));
+		}
+		else{
+			this.validaciones=validaciones;
+		}
 	}
 
 	public boolean ingresarVehiculo(Vehiculo vehiculo) {
-		for (IValidacion validacion : validaciones) {
+		for (IValidacion validacion : this.validaciones) {
 			validacion.validar(vehiculo);
 		}
-		
+
 		if (vehiculoServicio.obtenerVehiculo(vehiculo.getPlaca()) == null) {
 			vehiculoServicio.crearVehiculo(vehiculo);
 		}

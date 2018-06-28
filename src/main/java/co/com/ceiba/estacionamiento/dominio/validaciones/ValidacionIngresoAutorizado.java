@@ -10,7 +10,7 @@ public class ValidacionIngresoAutorizado implements IValidacion {
 	@Override
 	public void validar(Vehiculo vehiculo) {
 
-		if (vehiculo.getPlaca().toUpperCase().endsWith("A")) {
+		if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
 			Calendar cal = Calendar.getInstance();
 			int diaActual = cal.get(Calendar.DAY_OF_WEEK);
 			if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {

@@ -7,4 +7,5 @@ public interface IVehiculoServicio {
 	public boolean crearVehiculo(Vehiculo vehiculo);
 	
 	public Vehiculo obtenerVehiculo(String placa);
+	
 }

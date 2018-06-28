@@ -1,5 +1,7 @@
 package co.com.ceiba.estacionamiento.integracion;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
+import co.com.ceiba.estacionamiento.dominio.validaciones.IValidacion;
 import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
@@ -18,6 +21,8 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 @SpringBootTest
 public class ParqueaderoServicioTest {
 
+	protected static final List<IValidacion> VALIDACIONES_POR_DEFECTO = null;
+	
 	@Autowired
 	TicketParqueaderoServicio ticketParqueaderoServicio;
 
@@ -27,7 +32,7 @@ public class ParqueaderoServicioTest {
 	@Test
 	public void IngresarCarro() {
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio,vehiculoServicio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio,VALIDACIONES_POR_DEFECTO);
 
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 
@@ -38,61 +43,12 @@ public class ParqueaderoServicioTest {
 	public void IngresarMoto() {
 
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio,vehiculoServicio);
+		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio,VALIDACIONES_POR_DEFECTO);
 
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 
 		Assert.assertTrue("La moto no pudo ser ingresada.", resultado);
 	}
 
-	@Test
-	public void ValidarCuposCarroMax20() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCuposMotoMax10() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarAccesoVehiculoPlacasTerminadasEnA() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroHoraCarro() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroDiaCarro() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroHoraMoto() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroDiaMoto() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroMotoCilindrajeMayor500CC() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroCarroParaVariosDiasYHoras() {
-		Assert.assertTrue(true);
-	}
-
-	@Test
-	public void ValidarCobroMotoParaVariosDiasYHoras() {
-		Assert.assertTrue(true);
-	}
-
+	
 }
