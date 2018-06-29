@@ -167,7 +167,7 @@ public class ParqueaderoTest {
 					if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
 						int diaActual = Calendar.THURSDAY;
 						if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
-							throw new AccesoRestringidoException("No esta autorizado para ingresar");
+							throw new AccesoRestringidoException(Vigilante.MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR);
 						}
 					}
 					return null;
@@ -176,7 +176,7 @@ public class ParqueaderoTest {
 			;
 			vigilanteSpy.ingresarVehiculo(carro);
 			fail();
-		} catch (CupoExcedidoException e) {
+		} catch (AccesoRestringidoException e) {
 			// assert
 			Assert.assertEquals(Vigilante.MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR, e.getMessage());
 		}
