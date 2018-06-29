@@ -2,7 +2,6 @@ package co.com.ceiba.estacionamiento.dominio;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;

@@ -173,7 +173,7 @@ public class ParqueaderoTest {
 					return null;
 				}
 			}).when(vigilanteSpy).validarIngresoNoAutorizado(Mockito.any(Vehiculo.class));
-			;
+			
 			vigilanteSpy.ingresarVehiculo(carro);
 			fail();
 		} catch (AccesoRestringidoException e) {
