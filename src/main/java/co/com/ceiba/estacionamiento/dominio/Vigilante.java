@@ -1,52 +1,113 @@
 package co.com.ceiba.estacionamiento.dominio;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
+import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
+import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoNoEncontradoException;
+import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoNoRegistradoException;
+import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoRegistradoException;
 import co.com.ceiba.estacionamiento.dominio.servicios.ITarifaServicio;
 import co.com.ceiba.estacionamiento.dominio.servicios.ITicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.dominio.servicios.IVehiculoServicio;
-import co.com.ceiba.estacionamiento.dominio.validaciones.IValidacion;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
 
 public class Vigilante {
 
+	public static final String MSJ_EL_VEHICULO_SE_ENCUENTRA_REGISTRADO = "El vehiculo se encuentra registrado.";
+	public static final String MSJ_EL_VEHICULO_NO_EXISTE = "El vehiculo no existe.";
+	public static final String MSJ_EL_VEHICULO_NO_SE_ENCUENTRA_REGISTRADO = "El vehiculo no se encuentra registrado.";
+	public static final String MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR = "No esta autorizado para ingresar.";
+	public static final String MSJ_NO_HAY_CUPOS_DISPONIBLES = "No hay cupos disponibles.";
 	public static final int NUMERO_MAXIMO_CUPOS_CARRO = 20;
 	public static final int NUMERO_MAXIMO_CUPOS_MOTO = 10;
 	private static final double MIN_CILINDRAJE_MOTO = 500;
 	private static final int UNA_HORA_EN_MILISEG = 1000 * 60 * 60;
 	private static final int UN_DIA_EN_MILISEG = 24;
 	private static final int MIN_HORAS_POR_DIA = 9;
+	private static final int VEHICULO_NO_REGISTRADO = 0;
 
-	private List<IValidacion> validaciones;
-
+	
 	private ITicketParqueaderoServicio ticketParqueaderoServicio;
 	private IVehiculoServicio vehiculoServicio;
 	private ITarifaServicio tarifaServicio;
 
 	public Vigilante(ITicketParqueaderoServicio ticketParqueaderoServicio, IVehiculoServicio vehiculoServicio,
-			ITarifaServicio tarifaServicio, List<IValidacion> validaciones) {
+			ITarifaServicio tarifaServicio) {
 		this.ticketParqueaderoServicio = ticketParqueaderoServicio;
 		this.vehiculoServicio = vehiculoServicio;
 		this.tarifaServicio = tarifaServicio;
-		this.validaciones = validaciones;
 	}
+	
+	private void validarCupoVehiculo(Vehiculo vehiculo) {
+		if (vehiculo instanceof Carro) {
+			Integer totalCarrosIngresados = this.ticketParqueaderoServicio
+					.verificarCupoVehiculo(EnumTipoVehiculo.CARRO.name());
+			if (totalCarrosIngresados > NUMERO_MAXIMO_CUPOS_CARRO) {
+				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
+			}
+		} else {
+			Integer totalMotosIngresadas = this.ticketParqueaderoServicio
+					.verificarCupoVehiculo(EnumTipoVehiculo.MOTO.name());
+			if (totalMotosIngresadas > NUMERO_MAXIMO_CUPOS_MOTO) {
+				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
+			}
+
+		}
+
+	}
+	
+	public void validarIngresoNoAutorizado(Vehiculo vehiculo) {
+		if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
+			Calendar cal = Calendar.getInstance();
+			int diaActual = cal.get(Calendar.DAY_OF_WEEK);
+			if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
+				throw new AccesoRestringidoException(MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR);
+			}
+		}
+	}
+	
+	private void validarVehiculoNoRegistrado(String placa) {
+		if (ticketParqueaderoServicio
+				.verificarIngresoVehiculo(placa) == VEHICULO_NO_REGISTRADO) {
+			throw new VehiculoNoRegistradoException(MSJ_EL_VEHICULO_NO_SE_ENCUENTRA_REGISTRADO);
+		}
+	}
+	
+	private void validarVehiculoRegistrado(Vehiculo vehiculo) {
+		if (ticketParqueaderoServicio
+				.verificarIngresoVehiculo(vehiculo.getPlaca()) != VEHICULO_NO_REGISTRADO) {
+			throw new VehiculoRegistradoException(MSJ_EL_VEHICULO_SE_ENCUENTRA_REGISTRADO);
+		}
+	}
+	
+	private void validarPlacaVehiculo(String placa) {
+		if (vehiculoServicio.obtenerVehiculo(placa) == null) {
+			throw new VehiculoNoEncontradoException(MSJ_EL_VEHICULO_NO_EXISTE);
+		}
+	}
+	
 
 	public boolean ingresarVehiculo(Vehiculo vehiculo) {
-		for (IValidacion validacion : this.validaciones) {
-			validacion.validar(vehiculo);
-		}
+		
+		validarCupoVehiculo(vehiculo);
+		validarIngresoNoAutorizado(vehiculo);
+		validarVehiculoRegistrado(vehiculo);
+		
 		vehiculoServicio.guardarVehiculo(vehiculo);
+		
 		return ticketParqueaderoServicio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
 	}
 
 	public TicketParqueadero retirarVehiculo(String placa) {
-		for (IValidacion validacion : this.validaciones) {
-			validacion.validar(new Vehiculo(placa));
-		}
-
+		
+		validarPlacaVehiculo(placa);
+		validarVehiculoNoRegistrado(placa);
+		
 		TicketParqueadero ticketParqueadero = ticketParqueaderoServicio.obtenerTicketParquedero(placa);
 		Date fechaSalida = new Date();
 		ticketParqueadero.setFechaSalida(fechaSalida);

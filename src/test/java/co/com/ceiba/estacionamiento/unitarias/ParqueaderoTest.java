@@ -1,26 +1,21 @@
 package co.com.ceiba.estacionamiento.unitarias;
 
-import java.util.ArrayList;
+import static org.junit.Assert.fail;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
-import co.com.ceiba.estacionamiento.dominio.validaciones.IValidacion;
-import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionCupo;
-import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionIngresoAutorizado;
-import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoNoEncontrado;
-import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoNoRegistrado;
-import co.com.ceiba.estacionamiento.dominio.validaciones.ValidacionVehiculoRegistrado;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
@@ -52,23 +47,6 @@ public class ParqueaderoTest {
 	private VehiculoServicio vehiculoServicio;
 	private TarifaServicio TarifaServicio;
 	private Vigilante vigilante;
-
-	private List<IValidacion> validacionesIngresoVehiculo() {
-		List<IValidacion> validaciones = new ArrayList<>();
-		validaciones = new ArrayList<>();
-		validaciones.add(new ValidacionCupo(this.ticketParqueaderoServicio));
-		validaciones.add(new ValidacionIngresoAutorizado());
-		validaciones.add(new ValidacionVehiculoRegistrado(this.ticketParqueaderoServicio));
-		return validaciones;
-	}
-
-	private List<IValidacion> validacionesSalidaVehiculo() {
-		List<IValidacion> validaciones = new ArrayList<>();
-		validaciones = new ArrayList<>();
-		validaciones.add(new ValidacionVehiculoNoEncontrado(this.vehiculoServicio));
-		validaciones.add(new ValidacionVehiculoNoRegistrado(this.ticketParqueaderoServicio));
-		return validaciones;
-	}
 
 	@Before
 	public void setUp() {
@@ -119,8 +97,7 @@ public class ParqueaderoTest {
 			}
 		}).when(TarifaServicio).obtenerValorTarifa(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
-		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
-				validacionesIngresoVehiculo());
+		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio);
 	}
 
 	@Test
@@ -143,54 +120,66 @@ public class ParqueaderoTest {
 		Assert.assertTrue("La moto no pudo ser ingresada.", resultado);
 	}
 
-	@Test(expected = CupoExcedidoException.class)
+	@Test
 	public void ValidarCuposCarroMax20() {
 		// arrange
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_CARRO + 1);
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XZX-225").build();
-		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
-				validacionesIngresoVehiculo());
 		// act
-		vigilante.ingresarVehiculo(carro);
+		try {
+			vigilante.ingresarVehiculo(carro);
+			fail();
+		} catch (CupoExcedidoException e) {
+			// assert
+			Assert.assertEquals(Vigilante.MSJ_NO_HAY_CUPOS_DISPONIBLES, e.getMessage());
+		}
 	}
 
-	@Test(expected = CupoExcedidoException.class)
+	@Test
 	public void ValidarCuposMotoMax10() {
 		// arrange
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_MOTO + 1);
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(200).withPlaca("YTY-223").build();
-		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
-				validacionesIngresoVehiculo());
 		// act
-		vigilante.ingresarVehiculo(moto);
+		try {
+			vigilante.ingresarVehiculo(moto);
+			fail();
+		} catch (CupoExcedidoException e) {
+			// assert
+			Assert.assertEquals(Vigilante.MSJ_NO_HAY_CUPOS_DISPONIBLES, e.getMessage());
+		}
 	}
 
-	@Test(expected = AccesoRestringidoException.class)
+	@Test
 	public void ValidarAccesoVehiculoPlacasTerminadasEnA() {
 		// arrange
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
-		ValidacionIngresoAutorizado validacion = Mockito.mock(ValidacionIngresoAutorizado.class);
-		Mockito.doAnswer(new Answer<Void>() {
-			@Override
-			public Void answer(InvocationOnMock invocation) throws Throwable {
-				Object[] args = invocation.getArguments();
-				Vehiculo vehiculo = (Vehiculo) args[0];
-				if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
-					int diaActual = Calendar.THURSDAY;
-					if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
-						throw new AccesoRestringidoException("No esta autorizado para ingresar");
-					}
-				}
-				return null;
-			}
-		}).when(validacion).validar(Mockito.any(Vehiculo.class));
-		List<IValidacion> validaciones = new ArrayList<>();
-		validaciones.add(validacion);
-		Vigilante vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, validaciones);
 		// act
-		vigilante.ingresarVehiculo(carro);
+		try {
+			Vigilante vigilanteSpy= Mockito.spy(vigilante);
+			Mockito.doAnswer(new Answer<Void>() {
+				@Override
+				public Void answer(InvocationOnMock invocation) throws Throwable {
+					Object[] args = invocation.getArguments();
+					Vehiculo vehiculo = (Vehiculo) args[0];
+					if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
+						int diaActual = Calendar.THURSDAY;
+						if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
+							throw new AccesoRestringidoException("No esta autorizado para ingresar");
+						}
+					}
+					return null;
+				}
+			}).when(vigilanteSpy).validarIngresoNoAutorizado(Mockito.any(Vehiculo.class));
+			;
+			vigilanteSpy.ingresarVehiculo(carro);
+			fail();
+		} catch (CupoExcedidoException e) {
+			// assert
+			Assert.assertEquals(Vigilante.MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR, e.getMessage());
+		}
 	}
 
 	@Test
@@ -273,16 +262,12 @@ public class ParqueaderoTest {
 				? new CarroTestDataBuilder().withPlaca("CXX-225").build()
 				: new MotoTestDataBuilder().withPlaca("MXX-225").withCilindraje(cilindraje).build();
 
-		TicketParqueadero ticketParqueadero = null;
-
-		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio,
-				validacionesSalidaVehiculo());
-
-		ticketParqueadero = new TicketParqueaderoTestDataBuilder().withVehiculo(carro)
+		TicketParqueadero ticketParqueadero = new TicketParqueaderoTestDataBuilder().withVehiculo(carro)
 				.withFechaIngreso(new Date(System.currentTimeMillis() - tiempo)).build();
 
 		Mockito.when(ticketParqueaderoServicio.obtenerTicketParquedero(Mockito.anyString()))
 				.thenReturn(ticketParqueadero);
+		
 		Mockito.when(ticketParqueaderoServicio.actualizarTicketParqueadero(Mockito.any()))
 				.thenAnswer(new Answer<TicketParqueadero>() {
 					@Override
@@ -293,6 +278,8 @@ public class ParqueaderoTest {
 				});
 		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString()))
 				.thenReturn(VEHICULO_REGISTRADO);
+
+		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio);
 
 		return carro;
 	}
