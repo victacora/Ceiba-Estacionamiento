@@ -34,17 +34,18 @@ public class TicketParqueaderoServicio implements ITicketParqueaderoServicio {
 	}
 
 	@Override
-	public boolean actualizarTicketParqueadero(TicketParqueadero ticketParqueadero) {
-		boolean isActualizado = false;
+	public TicketParqueadero actualizarTicketParqueadero(TicketParqueadero ticketParqueadero) {
+		TicketParqueadero resultado = null;
 		Optional<TicketParqueaderoEntity> ticketParqueaderoEntity = ticketParqueaderoRepositorio
 				.obtenerTicketParqueaderoByPlaca(ticketParqueadero.getVehiculo().getPlaca());
 		if (ticketParqueaderoEntity.isPresent()) {
 			TicketParqueaderoEntity actualizarTicketParqueadero = ticketParqueaderoEntity.get();
 			actualizarTicketParqueadero.setFechaSalida(ticketParqueadero.getFechaSalida());
 			actualizarTicketParqueadero.setValor(ticketParqueadero.getValor());
-			isActualizado = ticketParqueaderoRepositorio.save(actualizarTicketParqueadero) != null;
+			actualizarTicketParqueadero = ticketParqueaderoRepositorio.save(actualizarTicketParqueadero);
+			resultado=TicketParqueaderoBuilder.convertirADominio(actualizarTicketParqueadero);
 		}
-		return isActualizado;
+		return resultado;
 	}
 
 	@Override

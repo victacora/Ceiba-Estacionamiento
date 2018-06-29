@@ -4,7 +4,7 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
 public interface IVehiculoServicio {
 
-	public boolean crearVehiculo(Vehiculo vehiculo);
+	public boolean guardarVehiculo(Vehiculo vehiculo);
 	
 	public Vehiculo obtenerVehiculo(String placa);
 	

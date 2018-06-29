@@ -18,7 +18,7 @@ public class VehiculoServicio implements IVehiculoServicio {
 	private IVehiculoRepositorio vehiculoRepositorio;
 
 	@Override
-	public boolean crearVehiculo(Vehiculo vehiculo) {
+	public boolean guardarVehiculo(Vehiculo vehiculo) {
 		VehiculoEntity vehiculoEntity = VehiculoBuilder.convertirAEntity(vehiculo);
 		return vehiculoRepositorio.save(vehiculoEntity) != null;
 	}

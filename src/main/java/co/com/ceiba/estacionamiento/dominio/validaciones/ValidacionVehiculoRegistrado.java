@@ -6,7 +6,8 @@ import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoRegistradoExcept
 import co.com.ceiba.estacionamiento.dominio.servicios.ITicketParqueaderoServicio;
 
 public class ValidacionVehiculoRegistrado implements IValidacion {
-
+	private static final int VEHICULO_NO_REGISTRADO = 0;
+	
 	private ITicketParqueaderoServicio ticketParqueaderoServicio;
 
 	public ValidacionVehiculoRegistrado(ITicketParqueaderoServicio repositorioTicketParqueadero) {
@@ -16,7 +17,7 @@ public class ValidacionVehiculoRegistrado implements IValidacion {
 	@Override
 	public void validar(Vehiculo vehiculo) {
 		if (ticketParqueaderoServicio
-				.verificarIngresoVehiculo(vehiculo.getPlaca()) != Vigilante.VEHICULO_NO_REGISTRADO) {
+				.verificarIngresoVehiculo(vehiculo.getPlaca()) != VEHICULO_NO_REGISTRADO) {
 			throw new VehiculoRegistradoException("El vehiculo ya se encuentra registrado.");
 		}
 	}

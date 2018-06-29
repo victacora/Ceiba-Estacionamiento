@@ -15,13 +15,12 @@ public class Vigilante {
 
 	public static final int NUMERO_MAXIMO_CUPOS_CARRO = 20;
 	public static final int NUMERO_MAXIMO_CUPOS_MOTO = 10;
-	public static final int VEHICULO_NO_REGISTRADO = 0;
-	private static final double MIN_CILINDRAJE_MOTO_COSTO_ADICIONAL = 500;
-	private static final int TOTAL_MILISEGUNDOS_EN_UNA_HORA = 1000 * 60 * 60;
-	private static final int TOTAL_HORAS_EN_UN_DIA = 24;
+	private static final double MIN_CILINDRAJE_MOTO = 500;
+	private static final int UNA_HORA_EN_MILISEG = 1000 * 60 * 60;
+	private static final int UN_DIA_EN_MILISEG = 24;
 	private static final int MIN_HORAS_POR_DIA = 9;
 
-	List<IValidacion> validaciones;
+	private List<IValidacion> validaciones;
 
 	private ITicketParqueaderoServicio ticketParqueaderoServicio;
 	private IVehiculoServicio vehiculoServicio;
@@ -39,15 +38,11 @@ public class Vigilante {
 		for (IValidacion validacion : this.validaciones) {
 			validacion.validar(vehiculo);
 		}
-		if (vehiculoServicio.obtenerVehiculo(vehiculo.getPlaca()) == null) {
-			vehiculoServicio.crearVehiculo(vehiculo);
-		}
+		vehiculoServicio.guardarVehiculo(vehiculo);
 		return ticketParqueaderoServicio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
 	}
 
-	public boolean retirarVehiculo(String placa) {
-		boolean resultado = false;
-
+	public TicketParqueadero retirarVehiculo(String placa) {
 		for (IValidacion validacion : this.validaciones) {
 			validacion.validar(new Vehiculo(placa));
 		}
@@ -55,44 +50,51 @@ public class Vigilante {
 		TicketParqueadero ticketParqueadero = ticketParqueaderoServicio.obtenerTicketParquedero(placa);
 		Date fechaSalida = new Date();
 		ticketParqueadero.setFechaSalida(fechaSalida);
-		double valor = calcularValorAPagar(ticketParqueadero);
-		ticketParqueadero.setValor(valor);
-		resultado = ticketParqueaderoServicio.actualizarTicketParqueadero(ticketParqueadero);
-		return resultado;
+		ticketParqueadero.setValor(calcularValorAPagar(ticketParqueadero));
+		ticketParqueadero = ticketParqueaderoServicio.actualizarTicketParqueadero(ticketParqueadero);
+		return ticketParqueadero;
 	}
 
-	public double calcularValorAPagar(TicketParqueadero ticketParqueadero) {
+	private double calcularValorAPagar(TicketParqueadero ticketParqueadero) {
 		double valor;
+		int totalHorasTranscurridas = obtenerTotalHorasEntreDosFechas(ticketParqueadero.getFechaIngreso(),
+				ticketParqueadero.getFechaSalida());
+		int totalDias = totalHorasTranscurridas / UN_DIA_EN_MILISEG;
+		int totalHoras = totalHorasTranscurridas % UN_DIA_EN_MILISEG;
 
-		int totalHorasTranscurridas = (int) (ticketParqueadero.getFechaSalida().getTime()
-				- ticketParqueadero.getFechaIngreso().getTime()) / TOTAL_MILISEGUNDOS_EN_UNA_HORA;
-		int totalDias = totalHorasTranscurridas / TOTAL_HORAS_EN_UN_DIA;
-		int totalHoras = totalHorasTranscurridas % TOTAL_HORAS_EN_UN_DIA;
-
-		if(totalHoras>MIN_HORAS_POR_DIA){
-			totalHoras=0;
-			totalDias=totalDias+1;
+		if (totalHoras > MIN_HORAS_POR_DIA) {
+			totalHoras = 0;
+			totalDias = totalDias + 1;
 		}
-		
+
 		if (ticketParqueadero.getVehiculo() instanceof Moto) {
 			Moto moto = (Moto) ticketParqueadero.getVehiculo();
-
-			valor = totalDias
-					* tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.MOTO.name(), EnumTipoTarifa.TIEMPO.name(),
-							EnumUnidadTiempo.DIA.name())
-					+ totalHoras * tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.MOTO.name(),
-							EnumTipoTarifa.TIEMPO.name(), EnumUnidadTiempo.HORA.name());
-			
-			if (moto.getCilindraje() > MIN_CILINDRAJE_MOTO_COSTO_ADICIONAL)
-				valor = valor + tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.MOTO.name(),
-						EnumTipoTarifa.ADICIONAL.name(), EnumUnidadTiempo.NOAPLICA.name());
+			valor = aplicarTarifaVehiculo(EnumTipoVehiculo.MOTO, totalDias, totalHoras, moto.getCilindraje());
 		} else {
-			valor = totalDias
-					* tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.CARRO.name(), EnumTipoTarifa.TIEMPO.name(),
-							EnumUnidadTiempo.DIA.name())
-					+ totalHoras * tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.CARRO.name(),
-							EnumTipoTarifa.TIEMPO.name(), EnumUnidadTiempo.HORA.name());
+			valor = aplicarTarifaVehiculo(EnumTipoVehiculo.CARRO, totalDias, totalHoras, 0);
 		}
 		return valor;
+	}
+
+	private double aplicarTarifaVehiculo(EnumTipoVehiculo tipoVehiculo, int totalDias, int totalHoras,
+			double cilindraje) {
+		return totalDias
+				* tarifaServicio.obtenerValorTarifa(tipoVehiculo.name(), EnumTipoTarifa.TIEMPO.name(),
+						EnumUnidadTiempo.DIA.name())
+				+ totalHoras * tarifaServicio.obtenerValorTarifa(tipoVehiculo.name(), EnumTipoTarifa.TIEMPO.name(),
+						EnumUnidadTiempo.HORA.name())
+				+ aplicarCostoAdicionalMoto(tipoVehiculo, cilindraje);
+	}
+
+	private double aplicarCostoAdicionalMoto(EnumTipoVehiculo tipoVehiculo, double cilindraje) {
+		if (tipoVehiculo == EnumTipoVehiculo.MOTO && cilindraje > MIN_CILINDRAJE_MOTO) {
+			return tarifaServicio.obtenerValorTarifa(EnumTipoVehiculo.MOTO.name(), EnumTipoTarifa.ADICIONAL.name(),
+					EnumUnidadTiempo.NOAPLICA.name());
+		}
+		return 0;
+	}
+
+	private int obtenerTotalHorasEntreDosFechas(Date fechaInicial, Date fechafinal) {
+		return (int) (fechafinal.getTime() - fechaInicial.getTime()) / UNA_HORA_EN_MILISEG;
 	}
 }

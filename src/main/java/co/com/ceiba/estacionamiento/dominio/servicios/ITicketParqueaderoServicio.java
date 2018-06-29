@@ -11,7 +11,7 @@ public interface ITicketParqueaderoServicio {
 		
 		public boolean crearTicketParqueadero(TicketParqueadero ticketParqueadero);
 		
-		public boolean actualizarTicketParqueadero(TicketParqueadero ticketParqueadero);
+		public TicketParqueadero actualizarTicketParqueadero(TicketParqueadero ticketParqueadero);
 
 		public TicketParqueadero obtenerTicketParquedero(String placa);
 
