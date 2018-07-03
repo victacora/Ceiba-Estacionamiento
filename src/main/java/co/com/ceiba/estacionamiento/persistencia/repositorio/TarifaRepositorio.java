@@ -7,6 +7,6 @@ import co.com.ceiba.estacionamiento.persistencia.entidades.TarifaEntity;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TarifaId;
 
 @Repository
-public interface  ITarifaRepositorio  extends CrudRepository<TarifaEntity, TarifaId> {
+public interface  TarifaRepositorio  extends CrudRepository<TarifaEntity, TarifaId> {
 	
 }

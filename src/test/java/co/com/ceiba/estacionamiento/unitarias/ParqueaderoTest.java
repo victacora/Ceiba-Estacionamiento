@@ -2,14 +2,13 @@ package co.com.ceiba.estacionamiento.unitarias;
 
 import static org.junit.Assert.fail;
 
-import java.util.Calendar;
+
 import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -19,12 +18,13 @@ import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
-import co.com.ceiba.estacionamiento.servicios.TarifaServicio;
-import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicio;
-import co.com.ceiba.estacionamiento.servicios.VehiculoServicio;
+import co.com.ceiba.estacionamiento.servicios.TarifaServicioImpl;
+import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicioImpl;
+import co.com.ceiba.estacionamiento.servicios.VehiculoServicioImpl;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.TicketParqueaderoTestDataBuilder;
+import co.com.ceiba.estacionamiento.dominio.CalendarioVigilante;
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
@@ -43,15 +43,17 @@ public class ParqueaderoTest {
 	private static final double VALOR_UN_DIA_UNA_HORA_CARRO = 11000;
 	private static final double VALOR_10_HORA_MOTO_650CC = 6000;
 
-	private TicketParqueaderoServicio ticketParqueaderoServicio;
-	private VehiculoServicio vehiculoServicio;
-	private TarifaServicio TarifaServicio;
+	private TicketParqueaderoServicioImpl ticketParqueaderoServicio;
+	private VehiculoServicioImpl vehiculoServicio;
+	private TarifaServicioImpl TarifaServicio;
 	private Vigilante vigilante;
+	
+	private CalendarioVigilante calendarioVigilante;
 
 	@Before
 	public void setUp() {
 
-		ticketParqueaderoServicio = Mockito.mock(TicketParqueaderoServicio.class);
+		ticketParqueaderoServicio = Mockito.mock(TicketParqueaderoServicioImpl.class);
 		Mockito.when(ticketParqueaderoServicio.crearTicketParqueadero(Mockito.any())).thenReturn(true);
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(CUPOS_USADOS);
 		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString()))
@@ -59,11 +61,11 @@ public class ParqueaderoTest {
 
 		Vehiculo vehiculo = Mockito.mock(Vehiculo.class);
 
-		vehiculoServicio = Mockito.mock(VehiculoServicio.class);
+		vehiculoServicio = Mockito.mock(VehiculoServicioImpl.class);
 		Mockito.when(vehiculoServicio.guardarVehiculo(Mockito.any())).thenReturn(true);
 		Mockito.when(vehiculoServicio.obtenerVehiculo(Mockito.anyString())).thenReturn(vehiculo);
 
-		TarifaServicio = Mockito.mock(TarifaServicio.class);
+		TarifaServicio = Mockito.mock(TarifaServicioImpl.class);
 		Mockito.doAnswer(new Answer<Double>() {
 			@Override
 			public Double answer(InvocationOnMock invocation) throws Throwable {
@@ -97,7 +99,10 @@ public class ParqueaderoTest {
 			}
 		}).when(TarifaServicio).obtenerValorTarifa(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
-		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio);
+		calendarioVigilante = Mockito.mock(CalendarioVigilante.class);
+		Mockito.when(calendarioVigilante.esDiaHabil()).thenReturn(true);
+		
+		vigilante = new Vigilante(ticketParqueaderoServicio,vehiculoServicio,TarifaServicio,calendarioVigilante);
 	}
 
 	@Test
@@ -153,28 +158,16 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarAccesoVehiculoPlacasTerminadasEnA() {
+	public void calendarioVigilante() {
 		// arrange
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
-		// act
+		
+		CalendarioVigilante calendarioVigilante = Mockito.mock(CalendarioVigilante.class);
+		Mockito.when(calendarioVigilante.esDiaHabil()).thenReturn(false);
+		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio, calendarioVigilante);
 		try {
-			Vigilante vigilanteSpy= Mockito.spy(vigilante);
-			Mockito.doAnswer(new Answer<Void>() {
-				@Override
-				public Void answer(InvocationOnMock invocation) throws Throwable {
-					Object[] args = invocation.getArguments();
-					Vehiculo vehiculo = (Vehiculo) args[0];
-					if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
-						int diaActual = Calendar.THURSDAY;
-						if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
-							throw new AccesoRestringidoException(Vigilante.MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR);
-						}
-					}
-					return null;
-				}
-			}).when(vigilanteSpy).validarIngresoNoAutorizado(Mockito.any(Vehiculo.class));
-			
-			vigilanteSpy.ingresarVehiculo(carro);
+		
+			vigilante.ingresarVehiculo(carro);
 			fail();
 		} catch (AccesoRestringidoException e) {
 			// assert
@@ -278,8 +271,6 @@ public class ParqueaderoTest {
 				});
 		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString()))
 				.thenReturn(VEHICULO_REGISTRADO);
-
-		vigilante = new Vigilante(ticketParqueaderoServicio, vehiculoServicio, TarifaServicio);
 
 		return carro;
 	}

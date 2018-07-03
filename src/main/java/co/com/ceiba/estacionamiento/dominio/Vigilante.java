@@ -1,6 +1,5 @@
 package co.com.ceiba.estacionamiento.dominio;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
@@ -8,9 +7,9 @@ import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoNoEncontradoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoNoRegistradoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoRegistradoException;
-import co.com.ceiba.estacionamiento.dominio.servicios.ITarifaServicio;
-import co.com.ceiba.estacionamiento.dominio.servicios.ITicketParqueaderoServicio;
-import co.com.ceiba.estacionamiento.dominio.servicios.IVehiculoServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.TarifaServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.TicketParqueaderoServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
@@ -26,20 +25,22 @@ public class Vigilante {
 	public static final int NUMERO_MAXIMO_CUPOS_MOTO = 10;
 	private static final double MIN_CILINDRAJE_MOTO = 500;
 	private static final int UNA_HORA_EN_MILISEG = 1000 * 60 * 60;
-	private static final int UN_DIA_EN_MILISEG = 24;
+	private static final int TOTAL_HORAS_EN_UN_DIA = 24;
 	private static final int MIN_HORAS_POR_DIA = 9;
 	private static final int VEHICULO_NO_REGISTRADO = 0;
 
 	
-	private ITicketParqueaderoServicio ticketParqueaderoServicio;
-	private IVehiculoServicio vehiculoServicio;
-	private ITarifaServicio tarifaServicio;
+	private TicketParqueaderoServicio ticketParqueaderoServicio;
+	private VehiculoServicio vehiculoServicio;
+	private TarifaServicio tarifaServicio;
+	private CalendarioVigilante calendarioVigilante;
 
-	public Vigilante(ITicketParqueaderoServicio ticketParqueaderoServicio, IVehiculoServicio vehiculoServicio,
-			ITarifaServicio tarifaServicio) {
+	public Vigilante(TicketParqueaderoServicio ticketParqueaderoServicio, VehiculoServicio vehiculoServicio,
+			TarifaServicio tarifaServicio, CalendarioVigilante calendarioVigilante) {
 		this.ticketParqueaderoServicio = ticketParqueaderoServicio;
 		this.vehiculoServicio = vehiculoServicio;
 		this.tarifaServicio = tarifaServicio;
+		this.calendarioVigilante =calendarioVigilante;
 	}
 	
 	private void validarCupoVehiculo(Vehiculo vehiculo) {
@@ -60,16 +61,12 @@ public class Vigilante {
 
 	}
 	
-	public void validarIngresoNoAutorizado(Vehiculo vehiculo) {
-		if (vehiculo.getPlaca().toUpperCase().startsWith("A")) {
-			Calendar cal = Calendar.getInstance();
-			int diaActual = cal.get(Calendar.DAY_OF_WEEK);
-			if (diaActual != Calendar.SUNDAY && diaActual != Calendar.MONDAY) {
+	private void validarIngresoNoAutorizado(Vehiculo vehiculo) {
+		if (vehiculo.getPlaca().toUpperCase().startsWith("A")&&!calendarioVigilante.esDiaHabil()) {
 				throw new AccesoRestringidoException(MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR);
-			}
 		}
 	}
-	
+
 	private void validarVehiculoNoRegistrado(String placa) {
 		if (ticketParqueaderoServicio
 				.verificarIngresoVehiculo(placa) == VEHICULO_NO_REGISTRADO) {
@@ -119,8 +116,8 @@ public class Vigilante {
 		double valor;
 		int totalHorasTranscurridas = obtenerTotalHorasEntreDosFechas(ticketParqueadero.getFechaIngreso(),
 				ticketParqueadero.getFechaSalida());
-		int totalDias = totalHorasTranscurridas / UN_DIA_EN_MILISEG;
-		int totalHoras = totalHorasTranscurridas % UN_DIA_EN_MILISEG;
+		int totalDias = totalHorasTranscurridas / TOTAL_HORAS_EN_UN_DIA;
+		int totalHoras = totalHorasTranscurridas % TOTAL_HORAS_EN_UN_DIA;
 
 		if (totalHoras > MIN_HORAS_POR_DIA) {
 			totalHoras = 0;

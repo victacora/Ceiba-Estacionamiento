@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
-import co.com.ceiba.estacionamiento.dominio.servicios.IVehiculoServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.persistencia.builders.VehiculoBuilder;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
-import co.com.ceiba.estacionamiento.persistencia.repositorio.IVehiculoRepositorio;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.VehiculoRepositorio;
 
 @Service
-public class VehiculoServicio implements IVehiculoServicio {
+public class VehiculoServicioImpl implements VehiculoServicio {
 
 	@Autowired
-	private IVehiculoRepositorio vehiculoRepositorio;
+	private VehiculoRepositorio vehiculoRepositorio;
 
 	@Override
 	public boolean guardarVehiculo(Vehiculo vehiculo) {

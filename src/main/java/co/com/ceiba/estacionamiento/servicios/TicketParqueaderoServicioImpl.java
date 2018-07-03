@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
-import co.com.ceiba.estacionamiento.dominio.servicios.ITicketParqueaderoServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.persistencia.builders.TicketParqueaderoBuilder;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
-import co.com.ceiba.estacionamiento.persistencia.repositorio.ITicketParqueaderoRepositorio;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.TicketParqueaderoRepositorio;
 
 @Service
-public class TicketParqueaderoServicio implements ITicketParqueaderoServicio {
+public class TicketParqueaderoServicioImpl implements TicketParqueaderoServicio {
 
 	@Autowired
-	private ITicketParqueaderoRepositorio ticketParqueaderoRepositorio;
+	private TicketParqueaderoRepositorio ticketParqueaderoRepositorio;
 
 	@Override
 	public Integer verificarCupoVehiculo(String tipoVehiculo) {

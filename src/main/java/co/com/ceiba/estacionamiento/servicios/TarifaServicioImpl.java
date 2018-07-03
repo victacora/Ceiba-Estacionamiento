@@ -5,16 +5,17 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import co.com.ceiba.estacionamiento.dominio.servicios.ITarifaServicio;
+
+import co.com.ceiba.estacionamiento.dominio.servicios.TarifaServicio;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TarifaEntity;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TarifaId;
-import co.com.ceiba.estacionamiento.persistencia.repositorio.ITarifaRepositorio;
+import co.com.ceiba.estacionamiento.persistencia.repositorio.TarifaRepositorio;
 
 @Service
-public class TarifaServicio implements ITarifaServicio {
+public class TarifaServicioImpl implements TarifaServicio {
 
 	@Autowired
-	private ITarifaRepositorio tarifaRepositorio;
+	private TarifaRepositorio tarifaRepositorio;
 
 
 	@Override

@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
 
 @Repository
-public interface  ITicketParqueaderoRepositorio  extends CrudRepository<TicketParqueaderoEntity, Long> {
+public interface  TicketParqueaderoRepositorio  extends CrudRepository<TicketParqueaderoEntity, Long> {
 	
-	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t JOIN vehiculo v ON t.placa=v.placa WHERE v.tipo_vehiculo=:tipoVehiculo", nativeQuery = true)
+	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t JOIN vehiculo v ON t.placa=v.placa WHERE v.tipo_vehiculo=:tipoVehiculo AND t.fecha_salida IS NULL", nativeQuery = true)
 	public Integer verificarCupoVehiculo(@Param("tipoVehiculo")String tipoVehiculo);
 	
 	@Query(value="SELECT COUNT(*) FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NULL", nativeQuery = true)

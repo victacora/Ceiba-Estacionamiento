@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
 @Repository
-public interface  IVehiculoRepositorio  extends CrudRepository<VehiculoEntity, String> {
+public interface  VehiculoRepositorio  extends CrudRepository<VehiculoEntity, String> {
 
 }
