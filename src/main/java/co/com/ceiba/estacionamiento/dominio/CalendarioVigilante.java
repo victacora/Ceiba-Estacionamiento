@@ -1,6 +1,9 @@
 package co.com.ceiba.estacionamiento.dominio;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class CalendarioVigilante {
 
@@ -8,12 +11,11 @@ public class CalendarioVigilante {
 	private int mesActual;
 	private int anioActual;
 	
-	public CalendarioVigilante(Integer diaActual,Integer mesActual, Integer anioActual)
+	public CalendarioVigilante(int diaActual,int mesActual, int anioActual)
 	{
-		Calendar cal=Calendar.getInstance();
-		this.diaActual = diaActual==null?cal.get(Calendar.DAY_OF_WEEK):diaActual;
-		this.mesActual = mesActual==null?cal.get(Calendar.DAY_OF_WEEK):mesActual;
-		this.anioActual = anioActual==null?cal.get(Calendar.DAY_OF_WEEK):anioActual;
+		this.diaActual = diaActual;
+		this.mesActual = mesActual;
+		this.anioActual = anioActual;
 	}
 		
 	public boolean esDiaHabil() {
@@ -32,6 +34,19 @@ public class CalendarioVigilante {
 		return anioActual;
 	}
 	
-	
+	public Date getFechaActual(){
+		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy");
+		StringBuilder fecha=new StringBuilder();
+		fecha.append(this.diaActual);
+		fecha.append("/");
+		fecha.append(this.mesActual);
+		fecha.append("/");
+		fecha.append(this.anioActual);
+		try {
+			return formatoFecha.parse(fecha.toString());
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 
 }

@@ -5,7 +5,7 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
-public class TicketParqueaderoBuilder {
+public final class TicketParqueaderoBuilder {
 
 	private TicketParqueaderoBuilder() {
 		throw new IllegalStateException("Clase utilidad");

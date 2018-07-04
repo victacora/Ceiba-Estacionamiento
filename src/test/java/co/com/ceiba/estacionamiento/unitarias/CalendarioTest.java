@@ -10,7 +10,7 @@ import co.com.ceiba.estacionamiento.dominio.CalendarioVigilante;
 public class CalendarioTest {
 
 	@Test
-	public void ValidarEsDiaHabil() {
+	public void validarEsDiaHabil() {
 		// arrange
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(Calendar.MONDAY, 6, 2018);
 		// act
@@ -20,7 +20,7 @@ public class CalendarioTest {
 	}
 
 	@Test
-	public void ValidarDiaNoHabil() {
+	public void validarDiaNoHabil() {
 		// arrange
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(Calendar.TUESDAY, 6, 2018);
 		// act

@@ -6,7 +6,7 @@ import co.com.ceiba.estacionamiento.dominio.fabrica.VehiculoFactory;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
-public class VehiculoBuilder {
+public final class VehiculoBuilder {
 
 	private VehiculoBuilder() {
 		throw new IllegalStateException("Clase utilidad");

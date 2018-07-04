@@ -106,7 +106,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void IngresarCarro() {
+	public void ingresarCarro() {
 		// arrange
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
 		// act
@@ -116,7 +116,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void IngresarMoto() {
+	public void ingresarMoto() {
 		// arrange
 		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
 		// act
@@ -126,7 +126,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCuposCarroMax20() {
+	public void validarCuposCarroMax20() {
 		// arrange
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_CARRO + 1);
@@ -142,7 +142,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCuposMotoMax10() {
+	public void validarCuposMotoMax10() {
 		// arrange
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_MOTO + 1);
@@ -158,7 +158,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void calendarioVigilante() {
+	public void validarIngresoVehiculoDiaHabilTest() {
 		// arrange
 		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
 		
@@ -176,7 +176,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroHoraCarro() {
+	public void validarCobroHoraCarro() {
 		// arrange
 		Vehiculo carro = inicializarCobroParqueaderoVehiculo(UNA_HORA_EN_MILISEG, EnumTipoVehiculo.CARRO, 0);
 		// act
@@ -186,7 +186,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroDiaCarro() {
+	public void validarCobroDiaCarro() {
 		// arrange
 		Vehiculo carro = inicializarCobroParqueaderoVehiculo(UN_DIA_EN_MILISEG, EnumTipoVehiculo.CARRO, 0);
 		// act
@@ -196,7 +196,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroHoraMoto() {
+	public void validarCobroHoraMoto() {
 		// arrange
 		Vehiculo moto = inicializarCobroParqueaderoVehiculo(UNA_HORA_EN_MILISEG, EnumTipoVehiculo.MOTO, 0);
 		// act
@@ -207,7 +207,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroDiaMoto() {
+	public void validarCobroDiaMoto() {
 		// arrange
 		Vehiculo moto = inicializarCobroParqueaderoVehiculo(UN_DIA_EN_MILISEG, EnumTipoVehiculo.MOTO, 0);
 		// act
@@ -217,7 +217,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroMotoCilindrajeMayor500CC() {
+	public void validarCobroMotoCilindrajeMayor500CC() {
 		// arrange
 		Vehiculo moto = inicializarCobroParqueaderoVehiculo(0, EnumTipoVehiculo.MOTO, 650);
 		// act
@@ -228,7 +228,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroCarroUnDiaY3horas() {
+	public void validarCobroCarroUnDiaY3horas() {
 		// arrange
 		Vehiculo carro = inicializarCobroParqueaderoVehiculo((UN_DIA_EN_MILISEG + 3 * UNA_HORA_EN_MILISEG),
 				EnumTipoVehiculo.CARRO, 0);
@@ -240,7 +240,7 @@ public class ParqueaderoTest {
 	}
 
 	@Test
-	public void ValidarCobroMotoPara10Hora650CC() {
+	public void validarCobroMotoPara10Hora650CC() {
 		// arrange
 		Vehiculo moto = inicializarCobroParqueaderoVehiculo(10 * UNA_HORA_EN_MILISEG, EnumTipoVehiculo.MOTO, 650);
 		// act

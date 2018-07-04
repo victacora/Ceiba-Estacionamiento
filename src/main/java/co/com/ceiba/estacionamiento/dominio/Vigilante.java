@@ -47,13 +47,13 @@ public class Vigilante {
 		if (vehiculo instanceof Carro) {
 			Integer totalCarrosIngresados = this.ticketParqueaderoServicio
 					.verificarCupoVehiculo(EnumTipoVehiculo.CARRO.name());
-			if (totalCarrosIngresados > NUMERO_MAXIMO_CUPOS_CARRO) {
+			if (totalCarrosIngresados >= NUMERO_MAXIMO_CUPOS_CARRO) {
 				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
 			}
 		} else {
 			Integer totalMotosIngresadas = this.ticketParqueaderoServicio
 					.verificarCupoVehiculo(EnumTipoVehiculo.MOTO.name());
-			if (totalMotosIngresadas > NUMERO_MAXIMO_CUPOS_MOTO) {
+			if (totalMotosIngresadas >= NUMERO_MAXIMO_CUPOS_MOTO) {
 				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
 			}
 
