@@ -31,7 +31,7 @@ import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EstacionamientoApplication.class, H2JpaConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ParqueaderoTest {
+public class ParqueaderoServiciosTest {
 
 	private static final double VALOR_HORA_CARRO = 1000;
 	private static final double VALOR_DIA_CARRO = 8000;

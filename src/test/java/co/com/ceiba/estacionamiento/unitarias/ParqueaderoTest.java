@@ -108,7 +108,7 @@ public class ParqueaderoTest {
 	@Test
 	public void ingresarCarro() {
 		// arrange
-		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XXX-220").build();
+		Vehiculo carro = new CarroTestDataBuilder().withPlaca("CXX-001").build();
 		// act
 		boolean resultado = vigilante.ingresarVehiculo(carro);
 		// assert
@@ -118,7 +118,7 @@ public class ParqueaderoTest {
 	@Test
 	public void ingresarMoto() {
 		// arrange
-		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("XXY-220").build();
+		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(10).withPlaca("MXX-001").build();
 		// act
 		boolean resultado = vigilante.ingresarVehiculo(moto);
 		// assert
@@ -130,7 +130,7 @@ public class ParqueaderoTest {
 		// arrange
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_CARRO + 1);
-		Vehiculo carro = new CarroTestDataBuilder().withPlaca("XZX-225").build();
+		Vehiculo carro = new CarroTestDataBuilder().withPlaca("CMM-002").build();
 		// act
 		try {
 			vigilante.ingresarVehiculo(carro);
@@ -146,7 +146,7 @@ public class ParqueaderoTest {
 		// arrange
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString()))
 				.thenReturn(Vigilante.NUMERO_MAXIMO_CUPOS_MOTO + 1);
-		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(200).withPlaca("YTY-223").build();
+		Vehiculo moto = new MotoTestDataBuilder().withCilindraje(200).withPlaca("CXX-002").build();
 		// act
 		try {
 			vigilante.ingresarVehiculo(moto);
@@ -160,7 +160,7 @@ public class ParqueaderoTest {
 	@Test
 	public void validarIngresoVehiculoDiaHabilTest() {
 		// arrange
-		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AZX-225").build();
+		Vehiculo carro = new CarroTestDataBuilder().withPlaca("AXX-001").build();
 		
 		CalendarioVigilante calendarioVigilante = Mockito.mock(CalendarioVigilante.class);
 		Mockito.when(calendarioVigilante.esDiaHabil()).thenReturn(false);
@@ -252,8 +252,8 @@ public class ParqueaderoTest {
 	private Vehiculo inicializarCobroParqueaderoVehiculo(long tiempo, EnumTipoVehiculo tipoVehiculo,
 			double cilindraje) {
 		Vehiculo carro = tipoVehiculo == EnumTipoVehiculo.CARRO
-				? new CarroTestDataBuilder().withPlaca("CXX-225").build()
-				: new MotoTestDataBuilder().withPlaca("MXX-225").withCilindraje(cilindraje).build();
+				? new CarroTestDataBuilder().withPlaca("CXX-003").build()
+				: new MotoTestDataBuilder().withPlaca("MXX-003").withCilindraje(cilindraje).build();
 
 		TicketParqueadero ticketParqueadero = new TicketParqueaderoTestDataBuilder().withVehiculo(carro)
 				.withFechaIngreso(new Date(System.currentTimeMillis() - tiempo)).build();

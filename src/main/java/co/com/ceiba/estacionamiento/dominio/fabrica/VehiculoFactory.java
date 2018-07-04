@@ -10,7 +10,6 @@ public class VehiculoFactory {
 	public Vehiculo crearVehiculo(String tipoVehiculo, String placa, double cilindraje) {
 		Vehiculo vehiculo = null;
 		if (tipoVehiculo.equals(EnumTipoVehiculo.CARRO.name())) {
-
 			vehiculo = new Carro(placa);
 		} else {
 			vehiculo = new Moto(placa, cilindraje);
