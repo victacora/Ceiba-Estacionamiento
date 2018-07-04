@@ -16,11 +16,12 @@ import co.com.ceiba.estacionamiento.servicios.VehiculoServicioImpl;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.EstacionamientoApplication;
+import co.com.ceiba.estacionamiento.configuracion.H2JpaConfig;
 import co.com.ceiba.estacionamiento.dominio.CalendarioVigilante;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = EstacionamientoApplication.class)
+@SpringBootTest(classes = {EstacionamientoApplication.class, H2JpaConfig.class})
 public class ParqueaderoTest {
 
 	@Autowired
