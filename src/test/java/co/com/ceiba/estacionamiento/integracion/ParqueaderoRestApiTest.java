@@ -24,14 +24,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import co.com.ceiba.estacionamiento.EstacionamientoApplication;
 import co.com.ceiba.estacionamiento.api.ParqueaderoController;
-import co.com.ceiba.estacionamiento.configuracion.AppConfig;
+import co.com.ceiba.estacionamiento.configuracion.MapperConfig;
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.dominio.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {EstacionamientoApplication.class,AppConfig.class})
+@ContextConfiguration(classes = {EstacionamientoApplication.class,MapperConfig.class})
 @WebMvcTest(ParqueaderoController.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParqueaderoRestApiTest {
