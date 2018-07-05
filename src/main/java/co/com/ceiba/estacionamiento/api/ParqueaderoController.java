@@ -20,16 +20,16 @@ public class ParqueaderoController {
 	@Autowired
 	TicketParqueaderoServicio ticketParqueaderoSevicio;
 
-	//@Autowired
-	//private ModelMapper modelMapper;
+	@Autowired
+	private ModelMapper modelMapper;
 
-	@GetMapping(value = "/ticketsparqueadero", params = { "pagina", "size", "tamano", "dirOrdenamiento",
-			"campoOrdaniento" })
+	@GetMapping(value = "/ticketsparqueadero", params = { "pagina", "tamano", "dirOrdenamiento",
+			"campoOrdenamiento" })
 	@ResponseBody
 	public List<TicketParqueadero> listarTodosLosTicketsParqueadero(@RequestParam("pagina") int pagina,
 			@RequestParam("tamano") int tamano, @RequestParam("dirOrdenamiento") String dirOrdenamiento,
-			@RequestParam("campoOrdaniento") String campoOrdaniento) {
+			@RequestParam("campoOrdenamiento") String campoOrdenamiento) {
 		return ticketParqueaderoSevicio.listarTodosLosTicketsParqueadero(pagina, tamano, dirOrdenamiento,
-				campoOrdaniento);
+				campoOrdenamiento);
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,13 +22,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import co.com.ceiba.estacionamiento.EstacionamientoApplication;
 import co.com.ceiba.estacionamiento.api.ParqueaderoController;
+import co.com.ceiba.estacionamiento.configuracion.AppConfig;
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 import co.com.ceiba.estacionamiento.dominio.servicios.TicketParqueaderoServicio;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {EstacionamientoApplication.class,AppConfig.class})
 @WebMvcTest(ParqueaderoController.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParqueaderoRestApiTest {
@@ -48,7 +52,7 @@ public class ParqueaderoRestApiTest {
 
 		given(ticketParqueaderoSevicio.listarTodosLosTicketsParqueadero(0,10,"ASC","fechaIngreso")).willReturn(ticketParqueaderos);
 
-		mvc.perform(get("/parqueadero/ticketsparqueadero").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+		mvc.perform(get("/parqueadero/ticketsparqueadero?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fechaIngreso").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].", is(ticketParqueadero.getFechaIngreso())));
 	}
 

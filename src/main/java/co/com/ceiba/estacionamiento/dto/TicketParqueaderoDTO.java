@@ -1,4 +1,4 @@
-package co.com.ceiba.estacionamiento.DTO;
+package co.com.ceiba.estacionamiento.dto;
 
 import java.util.Date;
 
