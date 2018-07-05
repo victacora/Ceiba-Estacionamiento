@@ -24,14 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import co.com.ceiba.estacionamiento.EstacionamientoApplication;
 import co.com.ceiba.estacionamiento.api.ParqueaderoController;
-import co.com.ceiba.estacionamiento.configuracion.MapperConfig;
-import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
-import co.com.ceiba.estacionamiento.dominio.Vehiculo;
-import co.com.ceiba.estacionamiento.dominio.servicios.TicketParqueaderoServicio;
-import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
+import co.com.ceiba.estacionamiento.dominio.dto.TicketParqueaderoDTO;
+import co.com.ceiba.estacionamiento.dominio.servicios.ParqueaderoServicio;
+import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
+import co.com.ceiba.estacionamiento.persistencia.builders.TicketParqueaderoDTOBuilder;
+import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
+import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {EstacionamientoApplication.class,MapperConfig.class})
+@ContextConfiguration(classes = { EstacionamientoApplication.class })
 @WebMvcTest(ParqueaderoController.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParqueaderoRestApiTest {
@@ -40,20 +41,33 @@ public class ParqueaderoRestApiTest {
 	private MockMvc mvc;
 
 	@MockBean
-	private TicketParqueaderoServicio ticketParqueaderoSevicio;
+	private ParqueaderoServicio parqueaderoSevicio;
 
 	@Test
 	public void consultarTodosLosTicketParqueadero() throws Exception {
-		Vehiculo vehiculo = new CarroTestDataBuilder().withPlaca("CXX-001").build();
-		Date fechaIngreso = new Date();
-		TicketParqueadero ticketParqueadero = new TicketParqueadero(fechaIngreso, vehiculo);
 
-		List<TicketParqueadero> ticketParqueaderos = Arrays.asList(ticketParqueadero);
+		VehiculoEntity vehiculoEntity = new VehiculoEntity();
+		vehiculoEntity.setPlaca("CXX-000");
+		vehiculoEntity.setCilindraje(10);
+		vehiculoEntity.setTipoVehiculo(EnumTipoVehiculo.CARRO.name());
+		TicketParqueaderoEntity ticketParqueaderoEntity = new TicketParqueaderoEntity();
+		ticketParqueaderoEntity.setId(1l);
+		ticketParqueaderoEntity.setValor(1000);
+		ticketParqueaderoEntity.setFechaIngreso(new Date());
+		ticketParqueaderoEntity.setFechaSalida(new Date());
+		ticketParqueaderoEntity.setVehiculo(vehiculoEntity);
 
-		given(ticketParqueaderoSevicio.listarTodosLosTicketsParqueadero(0,10,"ASC","fechaIngreso")).willReturn(ticketParqueaderos);
+		TicketParqueaderoDTO ticketParqueaderoDTO = TicketParqueaderoDTOBuilder.convertirADTO(ticketParqueaderoEntity);
 
-		mvc.perform(get("/parqueadero/ticketsparqueadero?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fechaIngreso").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].", is(ticketParqueadero.getFechaIngreso())));
+		List<TicketParqueaderoDTO> ticketParqueaderos = Arrays.asList(ticketParqueaderoDTO);
+
+		given(parqueaderoSevicio.listarTicketsParqueadero(0, 10, "ASC", "fechaIngreso")).willReturn(ticketParqueaderos);
+
+		mvc.perform(
+				get("/parqueadero/ticketsparqueadero?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fechaIngreso")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].id", is(1)));
 	}
 
 }

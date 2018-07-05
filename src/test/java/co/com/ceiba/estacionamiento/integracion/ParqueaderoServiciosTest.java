@@ -19,7 +19,7 @@ import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
 import co.com.ceiba.estacionamiento.servicios.TarifaServicioImpl;
-import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicioImpl;
+import co.com.ceiba.estacionamiento.servicios.ParqueaderoServicioImpl;
 import co.com.ceiba.estacionamiento.servicios.VehiculoServicioImpl;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
@@ -40,7 +40,7 @@ public class ParqueaderoServiciosTest {
 	private static final double VALOR_ADICIONAL_MOTO = 2000;
 
 	@Autowired
-	TicketParqueaderoServicioImpl ticketParqueaderoServicio;
+	ParqueaderoServicioImpl ticketParqueaderoServicio;
 
 	@Autowired
 	VehiculoServicioImpl vehiculoServicio;

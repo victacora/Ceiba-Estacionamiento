@@ -19,7 +19,7 @@ import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumUnidadTiempo;
 import co.com.ceiba.estacionamiento.servicios.TarifaServicioImpl;
-import co.com.ceiba.estacionamiento.servicios.TicketParqueaderoServicioImpl;
+import co.com.ceiba.estacionamiento.servicios.ParqueaderoServicioImpl;
 import co.com.ceiba.estacionamiento.servicios.VehiculoServicioImpl;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
@@ -43,7 +43,7 @@ public class ParqueaderoTest {
 	private static final double VALOR_UN_DIA_UNA_HORA_CARRO = 11000;
 	private static final double VALOR_10_HORA_MOTO_650CC = 6000;
 
-	private TicketParqueaderoServicioImpl ticketParqueaderoServicio;
+	private ParqueaderoServicioImpl ticketParqueaderoServicio;
 	private VehiculoServicioImpl vehiculoServicio;
 	private TarifaServicioImpl TarifaServicio;
 	private Vigilante vigilante;
@@ -53,7 +53,7 @@ public class ParqueaderoTest {
 	@Before
 	public void setUp() {
 
-		ticketParqueaderoServicio = Mockito.mock(TicketParqueaderoServicioImpl.class);
+		ticketParqueaderoServicio = Mockito.mock(ParqueaderoServicioImpl.class);
 		Mockito.when(ticketParqueaderoServicio.crearTicketParqueadero(Mockito.any())).thenReturn(true);
 		Mockito.when(ticketParqueaderoServicio.verificarCupoVehiculo(Mockito.anyString())).thenReturn(CUPOS_USADOS);
 		Mockito.when(ticketParqueaderoServicio.verificarIngresoVehiculo(Mockito.anyString()))

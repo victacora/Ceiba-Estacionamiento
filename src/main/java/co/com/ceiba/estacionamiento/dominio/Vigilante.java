@@ -8,7 +8,7 @@ import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoNoEncontradoExce
 import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoNoRegistradoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.VehiculoRegistradoException;
 import co.com.ceiba.estacionamiento.dominio.servicios.TarifaServicio;
-import co.com.ceiba.estacionamiento.dominio.servicios.TicketParqueaderoServicio;
+import co.com.ceiba.estacionamiento.dominio.servicios.ParqueaderoServicio;
 import co.com.ceiba.estacionamiento.dominio.servicios.VehiculoServicio;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoTarifa;
 import co.com.ceiba.estacionamiento.enumeraciones.EnumTipoVehiculo;
@@ -30,14 +30,14 @@ public class Vigilante {
 	private static final int VEHICULO_NO_REGISTRADO = 0;
 
 	
-	private TicketParqueaderoServicio ticketParqueaderoServicio;
+	private ParqueaderoServicio parqueaderoServicio;
 	private VehiculoServicio vehiculoServicio;
 	private TarifaServicio tarifaServicio;
 	private CalendarioVigilante calendarioVigilante;
 
-	public Vigilante(TicketParqueaderoServicio ticketParqueaderoServicio, VehiculoServicio vehiculoServicio,
+	public Vigilante(ParqueaderoServicio parqueaderoServicio, VehiculoServicio vehiculoServicio,
 			TarifaServicio tarifaServicio, CalendarioVigilante calendarioVigilante) {
-		this.ticketParqueaderoServicio = ticketParqueaderoServicio;
+		this.parqueaderoServicio = parqueaderoServicio;
 		this.vehiculoServicio = vehiculoServicio;
 		this.tarifaServicio = tarifaServicio;
 		this.calendarioVigilante =calendarioVigilante;
@@ -45,13 +45,13 @@ public class Vigilante {
 	
 	private void validarCupoVehiculo(Vehiculo vehiculo) {
 		if (vehiculo instanceof Carro) {
-			Integer totalCarrosIngresados = this.ticketParqueaderoServicio
+			Integer totalCarrosIngresados = this.parqueaderoServicio
 					.verificarCupoVehiculo(EnumTipoVehiculo.CARRO.name());
 			if (totalCarrosIngresados >= NUMERO_MAXIMO_CUPOS_CARRO) {
 				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
 			}
 		} else {
-			Integer totalMotosIngresadas = this.ticketParqueaderoServicio
+			Integer totalMotosIngresadas = this.parqueaderoServicio
 					.verificarCupoVehiculo(EnumTipoVehiculo.MOTO.name());
 			if (totalMotosIngresadas >= NUMERO_MAXIMO_CUPOS_MOTO) {
 				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
@@ -68,14 +68,14 @@ public class Vigilante {
 	}
 
 	private void validarVehiculoNoRegistrado(String placa) {
-		if (ticketParqueaderoServicio
+		if (parqueaderoServicio
 				.verificarIngresoVehiculo(placa) == VEHICULO_NO_REGISTRADO) {
 			throw new VehiculoNoRegistradoException(MSJ_EL_VEHICULO_NO_SE_ENCUENTRA_REGISTRADO);
 		}
 	}
 	
 	private void validarVehiculoRegistrado(Vehiculo vehiculo) {
-		if (ticketParqueaderoServicio
+		if (parqueaderoServicio
 				.verificarIngresoVehiculo(vehiculo.getPlaca()) != VEHICULO_NO_REGISTRADO) {
 			throw new VehiculoRegistradoException(MSJ_EL_VEHICULO_SE_ENCUENTRA_REGISTRADO);
 		}
@@ -96,7 +96,7 @@ public class Vigilante {
 		
 		vehiculoServicio.guardarVehiculo(vehiculo);
 		
-		return ticketParqueaderoServicio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
+		return parqueaderoServicio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
 	}
 
 	public TicketParqueadero retirarVehiculo(String placa) {
@@ -104,11 +104,11 @@ public class Vigilante {
 		validarPlacaVehiculo(placa);
 		validarVehiculoNoRegistrado(placa);
 		
-		TicketParqueadero ticketParqueadero = ticketParqueaderoServicio.obtenerTicketParquedero(placa);
+		TicketParqueadero ticketParqueadero = parqueaderoServicio.obtenerTicketParquedero(placa);
 		Date fechaSalida = new Date();
 		ticketParqueadero.setFechaSalida(fechaSalida);
 		ticketParqueadero.setValor(calcularValorAPagar(ticketParqueadero));
-		ticketParqueadero = ticketParqueaderoServicio.actualizarTicketParqueadero(ticketParqueadero);
+		ticketParqueadero = parqueaderoServicio.actualizarTicketParqueadero(ticketParqueadero);
 		return ticketParqueadero;
 	}
 
