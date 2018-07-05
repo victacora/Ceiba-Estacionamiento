@@ -81,13 +81,15 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 
 		PageRequest pageReq = PageRequest.of(pagina, tamano, Sort.Direction.fromString(dirOrdenamiento),
 				campoOrdenamiento);
-		Page<TicketParqueaderoEntity> ticketParqueaderoPage = ticketParqueaderoRepositorio.listarVehiculosParqueadero(pageReq);
+		Page<TicketParqueaderoEntity> ticketParqueaderoPage = ticketParqueaderoRepositorio
+				.listarVehiculosParqueadero(pageReq);
 
 		if (pagina > ticketParqueaderoPage.getTotalPages()) {
 			throw new PaginaNoEncontradaException("El numero de pagina consultado es erroneo.");
 		}
-
-		return ticketParqueaderoPage.getContent().stream().map(TicketParqueaderoDTOBuilder::convertirADTO)
+		List<TicketParqueaderoEntity> ticketParqueaderoEntities = ticketParqueaderoPage.getContent();
+		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder=new TicketParqueaderoDTOBuilder();
+		return ticketParqueaderoEntities.stream().map(ticketParqueaderoDTOBuilder::convertirADTO)
 				.collect(Collectors.toList());
 	}
 
@@ -95,24 +97,26 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 	public boolean registraringreso(VehiculoDTO vehiculoDTO, VehiculoServicio vehiculoServicio,
 			TarifaServicio tarifaServicio) {
 		VehiculoFactory vehiculoFactory = new VehiculoFactory();
-		Vehiculo vehiculo= vehiculoFactory.crearVehiculo(vehiculoDTO.getTipoVehiculo(), vehiculoDTO.getPlaca(), vehiculoDTO.getCilindraje());
+		Vehiculo vehiculo = vehiculoFactory.crearVehiculo(vehiculoDTO.getTipoVehiculo(), vehiculoDTO.getPlaca(),
+				vehiculoDTO.getCilindraje());
 		Calendar cal = Calendar.getInstance();
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(cal.get(Calendar.DAY_OF_MONTH),
 				(cal.get(Calendar.MONTH) + 1), cal.get(Calendar.YEAR));
-		
+
 		Vigilante vigilante = new Vigilante(this, vehiculoServicio, tarifaServicio, calendarioVigilante);
-		
+
 		return vigilante.ingresarVehiculo(vehiculo);
 	}
 
 	@Override
-	public TicketParqueadero retirarVehiculo(String placa, VehiculoServicio vehiculoServicio, TarifaServicio tarifaServicio) {
+	public TicketParqueadero retirarVehiculo(String placa, VehiculoServicio vehiculoServicio,
+			TarifaServicio tarifaServicio) {
 		Calendar cal = Calendar.getInstance();
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(cal.get(Calendar.DAY_OF_MONTH),
 				(cal.get(Calendar.MONTH) + 1), cal.get(Calendar.YEAR));
-		
+
 		Vigilante vigilante = new Vigilante(this, vehiculoServicio, tarifaServicio, calendarioVigilante);
-		
+
 		return vigilante.retirarVehiculo(placa);
 	}
 

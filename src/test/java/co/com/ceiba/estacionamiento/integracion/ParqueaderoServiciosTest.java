@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import co.com.ceiba.estacionamiento.dominio.Vigilante;
@@ -28,6 +29,7 @@ import co.com.ceiba.estacionamiento.configuracion.H2JpaConfig;
 import co.com.ceiba.estacionamiento.dominio.CalendarioVigilante;
 import co.com.ceiba.estacionamiento.dominio.Vehiculo;
 
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { EstacionamientoApplication.class, H2JpaConfig.class })
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

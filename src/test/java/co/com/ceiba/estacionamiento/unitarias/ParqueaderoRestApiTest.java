@@ -71,15 +71,15 @@ public class ParqueaderoRestApiTest {
 		TicketParqueaderoEntity ticketParqueaderoEntity = new TicketParqueaderoEntityTestDataBuilder().withId(1l)
 				.withValor(1000).withFechaIngreso(new Date()).withFechaSalida(new Date()).withVehiculo(vehiculoEntity)
 				.build();
-
-		TicketParqueaderoDTO ticketParqueaderoDTO = TicketParqueaderoDTOBuilder.convertirADTO(ticketParqueaderoEntity);
+		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder=new TicketParqueaderoDTOBuilder();
+		TicketParqueaderoDTO ticketParqueaderoDTO = ticketParqueaderoDTOBuilder.convertirADTO(ticketParqueaderoEntity);
 
 		List<TicketParqueaderoDTO> ticketParqueaderos = Arrays.asList(ticketParqueaderoDTO);
 
 		given(parqueaderoSevicio.listarVehiculosParqueadero(0, 10, "ASC", "fechaIngreso")).willReturn(ticketParqueaderos);
 
 		mvc.perform(
-				get("/parqueadero/listadovehiculos?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fechaIngreso")
+				get("/parqueadero/listadovehiculos?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fecha_ingreso")
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].id", is(1)));
 	}
@@ -110,7 +110,7 @@ public class ParqueaderoRestApiTest {
 				.willReturn(ticketParqueadero);
 
 		mvc.perform(
-				post("/parqueadero/retirarvehiculo").contentType(MediaType.APPLICATION_JSON).content(carro.getPlaca()))
+				post("/parqueadero/retirarvehiculo").contentType(MediaType.TEXT_PLAIN).content(carro.getPlaca()))
 				.andExpect(status().isOk());
 	}
 

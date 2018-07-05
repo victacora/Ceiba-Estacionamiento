@@ -8,14 +8,9 @@ import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEnti
 
 public final class TicketParqueaderoDTOBuilder {
 
-	private static ModelMapper modelMapper = new ModelMapper();
-
-	private TicketParqueaderoDTOBuilder() {
-		throw new IllegalStateException("Clase utilidad");
-	}
-
-	public static TicketParqueaderoDTO convertirADTO(TicketParqueaderoEntity ticketParqueadero) {
-
+	private ModelMapper modelMapper = new ModelMapper();
+	
+	public TicketParqueaderoDTOBuilder() {
 		PropertyMap<TicketParqueaderoEntity, TicketParqueaderoDTO> ticketParqueaderoMap = new PropertyMap<TicketParqueaderoEntity, TicketParqueaderoDTO>() {
 
 			protected void configure() {
@@ -28,7 +23,9 @@ public final class TicketParqueaderoDTOBuilder {
 		};
 
 		modelMapper.addMappings(ticketParqueaderoMap);
+	}
 
+	public TicketParqueaderoDTO convertirADTO(TicketParqueaderoEntity ticketParqueadero) {
 		return modelMapper.map(ticketParqueadero, TicketParqueaderoDTO.class);
 	}
 }

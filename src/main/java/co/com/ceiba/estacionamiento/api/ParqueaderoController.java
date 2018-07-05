@@ -53,7 +53,7 @@ public class ParqueaderoController {
 			boolean vehiculoRegistradoCorrectamente = parqueaderoSevicio.registraringreso(vehiculoDTO, vehiculoServicio,
 					tarifaServicio);
 			if (vehiculoRegistradoCorrectamente) {
-				resultado.put(COD_OPERACION_EXITOSA, "Vehiculo regsistrado correctamente.");
+				resultado.put(COD_OPERACION_EXITOSA, "Vehiculo registrado correctamente.");
 			} else {
 
 				resultado.put(COD_OPERACION_ERRONEA, "No se pudo registrar el vehiculo.");
@@ -75,7 +75,7 @@ public class ParqueaderoController {
 			TicketParqueadero ticketParqueadero = parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio,
 					tarifaServicio);
 			if (ticketParqueadero != null) {
-				resultado.put(COD_OPERACION_EXITOSA, "Vehiculo fue retirado correctamente.");
+				resultado.put(COD_OPERACION_EXITOSA, "El vehiculo fue retirado correctamente.");
 			} else {
 				resultado.put(COD_OPERACION_ERRONEA, "No se pudo retirar el vehiculo.");
 			}
