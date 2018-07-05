@@ -76,7 +76,7 @@ public class ParqueaderoRestApiTest {
 
 		List<TicketParqueaderoDTO> ticketParqueaderos = Arrays.asList(ticketParqueaderoDTO);
 
-		given(parqueaderoSevicio.listarVehiculosParqueadero(0, 10, "ASC", "fechaIngreso")).willReturn(ticketParqueaderos);
+		given(parqueaderoSevicio.listarVehiculosParqueadero(0, 10, "ASC", "fecha_ingreso")).willReturn(ticketParqueaderos);
 
 		mvc.perform(
 				get("/parqueadero/listadovehiculos?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fecha_ingreso")
