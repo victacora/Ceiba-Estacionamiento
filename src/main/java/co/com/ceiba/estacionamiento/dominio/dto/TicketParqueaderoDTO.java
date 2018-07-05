@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TicketParqueaderoDTO {
 
-	private static final SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 	private long id;
 

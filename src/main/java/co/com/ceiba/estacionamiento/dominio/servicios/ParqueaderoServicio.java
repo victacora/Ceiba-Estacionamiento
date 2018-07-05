@@ -5,6 +5,7 @@ import java.util.List;
 
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.dto.TicketParqueaderoDTO;
+import co.com.ceiba.estacionamiento.dominio.dto.VehiculoDTO;
 
 public interface ParqueaderoServicio {
 
@@ -19,5 +20,9 @@ public interface ParqueaderoServicio {
 		public TicketParqueadero obtenerTicketParquedero(String placa);
 
 		public List<TicketParqueaderoDTO> listarTicketsParqueadero(int pagina, int tamano, String dirOrdenamiento, String campoOrdenamiento);
+
+		public boolean registraringreso(VehiculoDTO vehiculo,VehiculoServicio vehiculoServicio,TarifaServicio tarifaServicio);
+
+		public TicketParqueadero retirarVehiculo(String placa, VehiculoServicio vehiculoServicio, TarifaServicio tarifaServicio);
 
 }

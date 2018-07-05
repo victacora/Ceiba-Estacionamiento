@@ -1,7 +1,5 @@
 package co.com.ceiba.estacionamiento.persistencia.builders;
 
-import java.text.SimpleDateFormat;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
