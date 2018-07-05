@@ -31,13 +31,13 @@ public class ParqueaderoController {
 	private static final long COD_OPERACION_EXITOSA = 1001l;
 	private static final long COD_OPERACION_ERRONEA = 1002l;
 	@Autowired
-	ParqueaderoServicio parqueaderoSevicio;
+	private ParqueaderoServicio parqueaderoSevicio;
 
 	@Autowired
-	VehiculoServicio vehiculoServicio;
+	private VehiculoServicio vehiculoServicio;
 
 	@Autowired
-	TarifaServicio tarifaServicio;
+	private TarifaServicio tarifaServicio;
 
 	@GetMapping(value = "/ticketsparqueadero")
 	@ResponseBody
@@ -47,7 +47,7 @@ public class ParqueaderoController {
 	}
 
 	@PostMapping(value = "/ingresarvehiculo")
-	public Map<Long, String> registrarIngreso(@RequestBody VehiculoDTO vehiculoDTO) {
+	public @ResponseBody Map<Long, String> registrarIngreso(@RequestBody VehiculoDTO vehiculoDTO) {
 		Map<Long, String> resultado = new HashMap<>();
 		try {
 			boolean vehiculoRegistradoCorrectamente = parqueaderoSevicio.registraringreso(vehiculoDTO, vehiculoServicio,
@@ -69,7 +69,7 @@ public class ParqueaderoController {
 	}
 
 	@PostMapping(value = "/retirarvehiculo")
-	public Map<Long, String> retirarvehiculo(@RequestBody String placa) {
+	public @ResponseBody Map<Long, String> retirarvehiculo(@RequestBody String placa) {
 		Map<Long, String> resultado = new HashMap<>();
 		try {
 			TicketParqueadero ticketParqueadero = parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio,
