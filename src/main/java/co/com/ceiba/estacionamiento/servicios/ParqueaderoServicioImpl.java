@@ -76,12 +76,12 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 	}
 
 	@Override
-	public List<TicketParqueaderoDTO> listarTicketsParqueadero(int pagina, int tamano, String dirOrdenamiento,
+	public List<TicketParqueaderoDTO> listarVehiculosParqueadero(int pagina, int tamano, String dirOrdenamiento,
 			String campoOrdenamiento) {
 
 		PageRequest pageReq = PageRequest.of(pagina, tamano, Sort.Direction.fromString(dirOrdenamiento),
 				campoOrdenamiento);
-		Page<TicketParqueaderoEntity> ticketParqueaderoPage = ticketParqueaderoRepositorio.findAll(pageReq);
+		Page<TicketParqueaderoEntity> ticketParqueaderoPage = ticketParqueaderoRepositorio.listarVehiculosParqueadero(pageReq);
 
 		if (pagina > ticketParqueaderoPage.getTotalPages()) {
 			throw new PaginaNoEncontradaException("El numero de pagina consultado es erroneo.");

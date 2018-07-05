@@ -19,7 +19,7 @@ public interface ParqueaderoServicio {
 
 		public TicketParqueadero obtenerTicketParquedero(String placa);
 
-		public List<TicketParqueaderoDTO> listarTicketsParqueadero(int pagina, int tamano, String dirOrdenamiento, String campoOrdenamiento);
+		public List<TicketParqueaderoDTO> listarVehiculosParqueadero(int pagina, int tamano, String dirOrdenamiento, String campoOrdenamiento);
 
 		public boolean registraringreso(VehiculoDTO vehiculo,VehiculoServicio vehiculoServicio,TarifaServicio tarifaServicio);
 

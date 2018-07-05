@@ -39,11 +39,11 @@ public class ParqueaderoController {
 	@Autowired
 	private TarifaServicio tarifaServicio;
 
-	@GetMapping(value = "/ticketsparqueadero")
+	@GetMapping(value = "/listadovehiculos")
 	@ResponseBody
 	public List<TicketParqueaderoDTO> listarTodosLosTicketsParqueadero(@RequestParam int pagina,
 			@RequestParam int tamano, @RequestParam String dirOrdenamiento, @RequestParam String campoOrdenamiento) {
-		return parqueaderoSevicio.listarTicketsParqueadero(pagina, tamano, dirOrdenamiento, campoOrdenamiento);
+		return parqueaderoSevicio.listarVehiculosParqueadero(pagina, tamano, dirOrdenamiento, campoOrdenamiento);
 	}
 
 	@PostMapping(value = "/ingresarvehiculo")

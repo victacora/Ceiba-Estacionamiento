@@ -40,7 +40,6 @@ import co.com.ceiba.estacionamiento.persistencia.builders.TicketParqueaderoDTOBu
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 import co.com.ceiba.estacionamiento.testdatabuilder.CarroTestDataBuilder;
-import co.com.ceiba.estacionamiento.testdatabuilder.MotoTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.TicketParqueaderoEntityTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.TicketParqueaderoTestDataBuilder;
 import co.com.ceiba.estacionamiento.testdatabuilder.VehiculoDTOTestDataBuilder;
@@ -65,7 +64,7 @@ public class ParqueaderoRestApiTest {
 	private TarifaServicio tarifaServicio;
 
 	@Test
-	public void consultarTicketesParqueadero() throws Exception {
+	public void consultarVehiculosParqueadero() throws Exception {
 
 		VehiculoEntity vehiculoEntity = new VehiculoEntityTestDataBuilder().withPlaca("CXX-000").withCilindraje(10)
 				.withTipoVehiculo(EnumTipoVehiculo.CARRO.name()).build();
@@ -77,10 +76,10 @@ public class ParqueaderoRestApiTest {
 
 		List<TicketParqueaderoDTO> ticketParqueaderos = Arrays.asList(ticketParqueaderoDTO);
 
-		given(parqueaderoSevicio.listarTicketsParqueadero(0, 10, "ASC", "fechaIngreso")).willReturn(ticketParqueaderos);
+		given(parqueaderoSevicio.listarVehiculosParqueadero(0, 10, "ASC", "fechaIngreso")).willReturn(ticketParqueaderos);
 
 		mvc.perform(
-				get("/parqueadero/ticketsparqueadero?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fechaIngreso")
+				get("/parqueadero/listadovehiculos?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fechaIngreso")
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].id", is(1)));
 	}

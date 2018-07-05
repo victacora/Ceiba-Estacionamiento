@@ -2,8 +2,7 @@ package co.com.ceiba.estacionamiento.testdatabuilder;
 
 import java.util.Date;
 
-import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
-import co.com.ceiba.estacionamiento.dominio.Vehiculo;
+
 import co.com.ceiba.estacionamiento.persistencia.entidades.TicketParqueaderoEntity;
 import co.com.ceiba.estacionamiento.persistencia.entidades.VehiculoEntity;
 
