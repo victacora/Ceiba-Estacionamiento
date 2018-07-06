@@ -1,22 +1,51 @@
 <div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill>
 	<div fxFlex="20%" class="panelregistroingreso">
-		<h1>Registrar entrada</h1>
-		<div fxLayout="row">
-			<form name="registra_entrada">
-				<label>Placa</label>
-				<mat-form-field class="md-block"> <input matInput
-					placeholder="Ingrese numero de placa"> </mat-form-field>
-				<label>Cilindraje(En caso de motocicleta)</label>
-				<mat-form-field class="md-block"> <input matInput
-					placeholder="Ingrese el cilindraje"> </mat-form-field>
-				<button mat-button color="primary">Ingresar</button>
-			</form>
-		</div>
+		<mat-card> 
+			<mat-card-header>
+				<mat-card-title>Registrar entrada</mat-card-title> 
+			</mat-card-header> 
+			<mat-card-content>
+				<div fxLayout="column">
+					<label>Placa</label>
+					<mat-form-field> 
+						<input name="placa" matInput placeholder="Ingrese numero de placa" required> 
+					</mat-form-field>
+					<label>Cilindraje(En caso de motocicleta)</label>
+					<mat-form-field> 
+						<input name="cilindro" type="number" value="0.0" matInput placeholder="Ingrese el cilindraje"> 
+					</mat-form-field>
+				</div>
+			</mat-card-content> 
+			<mat-card-actions align="end">
+				<button mat-raised-button (click)="ingresarVehiculo()" color="primary">Ingresar</button>
+			</mat-card-actions> 
+		</mat-card>
 	</div>
 	<div fxFlex="60%" class="panellistadovehiculos">
-		<h1 class="md-headline">Lista de Cobros</h1>
+		<mat-card> 
+			<mat-card-header>
+				<mat-card-title>Lista de Cobros</mat-card-title> 
+			</mat-card-header> 
+			<mat-card-content>
+				
+			</mat-card-content> 
+		</mat-card>
 	</div>
 	<div fxFlex="20%" class="panelregistrosalida">
-		<h1 class="md-headline">Registrar salida</h1>
+		<mat-card> 
+			<mat-card-header>
+				<mat-card-title>Registrar salida</mat-card-title> 
+			</mat-card-header> 
+			<mat-card-content>
+				<div fxLayout="column">
+					<label>Placa:</label>
+					<label>Cilindraje:</label>
+					<label>Fecha ingreso:</label>
+				</div>
+			</mat-card-content> 
+			<mat-card-actions align="end">
+				<button mat-raised-button (click)="retirarVehiculo()" color="primary">Registrar salida</button>
+			</mat-card-actions> 
+		</mat-card>
 	</div>
 </div>
