@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ import co.com.ceiba.estacionamiento.dominio.servicios.VehiculoServicio;
 @RequestMapping("/parqueadero")
 public class ParqueaderoController {
 
+	private final Log logger = LogFactory.getLog(getClass());
 	private static final long COD_OPERACION_EXITOSA = 1001l;
 	private static final long COD_OPERACION_ERRONEA = 1002l;
 	@Autowired
@@ -60,10 +63,13 @@ public class ParqueaderoController {
 			}
 		} catch (CupoExcedidoException e) {
 			resultado.put(e.getCodigoError(), e.getMessage());
+			logger.error(e);
 		} catch (AccesoRestringidoException e) {
 			resultado.put(e.getCodigoError(), e.getMessage());
+			logger.error(e);
 		} catch (VehiculoRegistradoException e) {
 			resultado.put(e.getCodigoError(), e.getMessage());
+			logger.error(e);
 		}
 		return resultado;
 	}
@@ -81,8 +87,10 @@ public class ParqueaderoController {
 			}
 		} catch (VehiculoNoEncontradoException e) {
 			resultado.put(e.getCodigoError(), e.getMessage());
+			logger.error(e);
 		} catch (VehiculoNoRegistradoException e) {
 			resultado.put(e.getCodigoError(), e.getMessage());
+			logger.error(e);
 		}
 		return resultado;
 	}
