@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {TicketParqueadero} from "./ticketparqueadero";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +12,8 @@ export class ParqueaderoService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getlistadovehiculos(pagina, tamano, dirOrdenamiento, campoOrdenamiento) {
-    return this.httpClient.get(this.API_URL + '/listadovehiculos?pagina=' + pagina + '&tamano=' + tamano + 'dirOrdenamiento=' + dirOrdenamiento + 'campoOrdenamiento=' + campoOrdenamiento);
+  getlistadovehiculos(pagina, tamano, dirOrdenamiento, campoOrdenamiento): Observable<TicketParqueadero[]> {
+    return this.httpClient.get<TicketParqueadero[]>(this.API_URL + '/listadovehiculos?pagina=' + pagina + '&tamano=' + tamano + '&dirOrdenamiento=' + dirOrdenamiento + '&campoOrdenamiento=' + campoOrdenamiento);
   }
 
   ingresarVehiculo(vehiculo) {
