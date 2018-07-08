@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,7 @@ public class ParqueaderoController {
 	@Autowired
 	private TarifaServicio tarifaServicio;
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(value = "/listadovehiculos")
 	@ResponseBody
 	public List<TicketParqueaderoDTO> listarTodosLosTicketsParqueadero(@RequestParam int pagina,
@@ -49,6 +51,7 @@ public class ParqueaderoController {
 		return parqueaderoSevicio.listarVehiculosParqueadero(pagina, tamano, dirOrdenamiento, campoOrdenamiento);
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/ingresarvehiculo")
 	public @ResponseBody Map<Long, String> registrarIngreso(@RequestBody VehiculoDTO vehiculoDTO) {
 		Map<Long, String> resultado = new HashMap<>();
@@ -74,6 +77,7 @@ public class ParqueaderoController {
 		return resultado;
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/retirarvehiculo")
 	public @ResponseBody Map<Long, String> retirarvehiculo(@RequestBody String placa) {
 		Map<Long, String> resultado = new HashMap<>();

@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LayoutModule} from '@angular/cdk/layout';
 import {
-  MatCardModule, MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule,
+  MatProgressSpinnerModule, MatCardModule, MatToolbarModule, MatFormFieldModule, MatInputModule, MatButtonModule,
   MatSidenavModule, MatIconModule, MatListModule, MatDialogModule, MatTableModule, MatPaginatorModule, MatSortModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -13,7 +13,7 @@ import {IngresarvehiculoComponent} from './ingresarvehiculo/ingresarvehiculo.com
 import {ListarvehiculosComponent} from './listarvehiculos/listarvehiculos.component';
 import {RetirarvehiculoComponent} from './retirarvehiculo/retirarvehiculo.component';
 import {DialogoComponent} from './dialogo/dialogo.component';
-
+import {HttpClientModule} from '@angular/common/http';
 
 
 @NgModule({
@@ -26,6 +26,7 @@ import {DialogoComponent} from './dialogo/dialogo.component';
   ],
   entryComponents: [DialogoComponent],
   imports: [
+    MatProgressSpinnerModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -43,9 +44,11 @@ import {DialogoComponent} from './dialogo/dialogo.component';
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    HttpClientModule
   ],
   exports: [
+    MatProgressSpinnerModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -63,7 +66,8 @@ import {DialogoComponent} from './dialogo/dialogo.component';
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
