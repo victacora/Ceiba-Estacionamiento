@@ -16,7 +16,7 @@ export class RetirarvehiculoComponent implements OnInit {
   public fechaIngreso: string;
 
   @Output() public recargar = new EventEmitter()
-  
+
   constructor(private dialog: MatDialog, private parqueaderoService: ParqueaderoService) {}
 
   ngOnInit() {
@@ -45,6 +45,9 @@ export class RetirarvehiculoComponent implements OnInit {
               }
             });
           }
+          this.placa = '';
+          this.cilindraje = 0;
+          this.fechaIngreso = '';
           this.recargar.emit();
         }
         console.info(response);

@@ -14,7 +14,7 @@ export class IngresarvehiculoComponent implements OnInit {
   public cilindraje: number = 0.0;
 
   @ViewChild('ingresarvehiculofrm') ingresarvehiculofrm;
-  
+
   @Output() public recargar = new EventEmitter();
 
   constructor(private dialog: MatDialog, private parqueaderoService: ParqueaderoService) {}
@@ -53,6 +53,8 @@ export class IngresarvehiculoComponent implements OnInit {
             });
           }
         }
+        this.placa = '';
+        this.cilindraje = 0;
         this.ingresarvehiculofrm.reset();
         this.recargar.emit();
         console.info(response);
