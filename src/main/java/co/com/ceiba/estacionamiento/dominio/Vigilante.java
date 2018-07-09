@@ -29,7 +29,6 @@ public class Vigilante {
 	private static final int MIN_HORAS_POR_DIA = 9;
 	private static final int VEHICULO_NO_REGISTRADO = 0;
 
-	
 	private ParqueaderoServicio parqueaderoServicio;
 	private VehiculoServicio vehiculoServicio;
 	private TarifaServicio tarifaServicio;
@@ -40,9 +39,9 @@ public class Vigilante {
 		this.parqueaderoServicio = parqueaderoServicio;
 		this.vehiculoServicio = vehiculoServicio;
 		this.tarifaServicio = tarifaServicio;
-		this.calendarioVigilante =calendarioVigilante;
+		this.calendarioVigilante = calendarioVigilante;
 	}
-	
+
 	private void validarCupoVehiculo(Vehiculo vehiculo) {
 		if (vehiculo instanceof Carro) {
 			Integer totalCarrosIngresados = this.parqueaderoServicio
@@ -51,8 +50,7 @@ public class Vigilante {
 				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
 			}
 		} else {
-			Integer totalMotosIngresadas = this.parqueaderoServicio
-					.verificarCupoVehiculo(EnumTipoVehiculo.MOTO.name());
+			Integer totalMotosIngresadas = this.parqueaderoServicio.verificarCupoVehiculo(EnumTipoVehiculo.MOTO.name());
 			if (totalMotosIngresadas >= NUMERO_MAXIMO_CUPOS_MOTO) {
 				throw new CupoExcedidoException(MSJ_NO_HAY_CUPOS_DISPONIBLES);
 			}
@@ -60,50 +58,47 @@ public class Vigilante {
 		}
 
 	}
-	
+
 	private void validarIngresoNoAutorizado(Vehiculo vehiculo) {
-		if (vehiculo.getPlaca().toUpperCase().startsWith("A")&&!calendarioVigilante.esDiaHabil()) {
-				throw new AccesoRestringidoException(MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR);
+		if (vehiculo.getPlaca().toUpperCase().startsWith("A") && !calendarioVigilante.esDiaHabil()) {
+			throw new AccesoRestringidoException(MSJ_NO_ESTA_AUTORIZADO_PARA_INGRESAR);
 		}
 	}
 
 	private void validarVehiculoNoRegistrado(String placa) {
-		if (parqueaderoServicio
-				.verificarIngresoVehiculo(placa) == VEHICULO_NO_REGISTRADO) {
+		if (parqueaderoServicio.verificarIngresoVehiculo(placa) == VEHICULO_NO_REGISTRADO) {
 			throw new VehiculoNoRegistradoException(MSJ_EL_VEHICULO_NO_SE_ENCUENTRA_REGISTRADO);
 		}
 	}
-	
+
 	private void validarVehiculoRegistrado(Vehiculo vehiculo) {
-		if (parqueaderoServicio
-				.verificarIngresoVehiculo(vehiculo.getPlaca()) != VEHICULO_NO_REGISTRADO) {
+		if (parqueaderoServicio.verificarIngresoVehiculo(vehiculo.getPlaca()) != VEHICULO_NO_REGISTRADO) {
 			throw new VehiculoRegistradoException(MSJ_EL_VEHICULO_SE_ENCUENTRA_REGISTRADO);
 		}
 	}
-	
+
 	private void validarPlacaVehiculo(String placa) {
 		if (vehiculoServicio.obtenerVehiculo(placa) == null) {
 			throw new VehiculoNoEncontradoException(MSJ_EL_VEHICULO_NO_EXISTE);
 		}
 	}
-	
 
 	public boolean ingresarVehiculo(Vehiculo vehiculo) {
-		
+
 		validarCupoVehiculo(vehiculo);
 		validarIngresoNoAutorizado(vehiculo);
 		validarVehiculoRegistrado(vehiculo);
-		
-		vehiculoServicio.guardarVehiculo(vehiculo);
-		
+		if (vehiculoServicio.obtenerVehiculo(vehiculo.getPlaca()) == null) {
+			vehiculoServicio.guardarVehiculo(vehiculo);
+		}
 		return parqueaderoServicio.crearTicketParqueadero(new TicketParqueadero(new Date(), vehiculo));
 	}
 
 	public TicketParqueadero retirarVehiculo(String placa) {
-		
+
 		validarPlacaVehiculo(placa);
 		validarVehiculoNoRegistrado(placa);
-		
+
 		TicketParqueadero ticketParqueadero = parqueaderoServicio.obtenerTicketParquedero(placa);
 		Date fechaSalida = new Date();
 		ticketParqueadero.setFechaSalida(fechaSalida);

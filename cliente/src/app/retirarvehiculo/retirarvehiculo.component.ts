@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {TicketParqueadero} from '../ticketparqueadero';
+import {Component, OnInit} from '@angular/core';
+import {DialogoComponent} from '../dialogo/dialogo.component';
+import {MatDialog, MatDialogRef} from '@angular/material';
+import {ParqueaderoService} from '../parqueadero.service';
 
 @Component({
   selector: 'app-retirarvehiculo',
@@ -7,9 +11,41 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RetirarvehiculoComponent implements OnInit {
 
-  constructor() { }
+  public placa: string;
+  public cilindraje: number;
+  public fechaIngreso: string;
+
+  constructor(private dialog: MatDialog, private parqueaderoService: ParqueaderoService) {}
 
   ngOnInit() {
   }
 
+  public cargarDatos(ticketParqueadero: TicketParqueadero) {
+    if (ticketParqueadero) {
+      this.placa = ticketParqueadero.placa;
+      this.cilindraje = ticketParqueadero.cilindraje;
+      this.fechaIngreso = ticketParqueadero.fechaIngreso;
+    }
+  }
+
+  public retirarVehiculo() {
+    if (this.placa !== '') {
+      this.parqueaderoService.retirarVehiculo(this.placa).subscribe((response) => {
+        if (response) {
+          for (var key in response) {
+            this.placa = '';
+            this.fechaIngreso = '';
+            this.cilindraje = 0;
+            this.dialog.open(DialogoComponent, {
+              data: {
+                titulo: "Informacion",
+                mensaje: response[key]
+              }
+            });
+          }
+        }
+        console.info(response);
+      });
+    }
+  }
 }
