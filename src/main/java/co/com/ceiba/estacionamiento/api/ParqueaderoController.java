@@ -1,7 +1,6 @@
 package co.com.ceiba.estacionamiento.api;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
-import co.com.ceiba.estacionamiento.dominio.dto.TicketParqueaderoDTO;
 import co.com.ceiba.estacionamiento.dominio.dto.VehiculoDTO;
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
@@ -29,6 +28,8 @@ import co.com.ceiba.estacionamiento.dominio.servicios.VehiculoServicio;
 
 @Controller
 @RequestMapping("/parqueadero")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class ParqueaderoController {
 
 	private final Log logger = LogFactory.getLog(getClass());
@@ -43,7 +44,6 @@ public class ParqueaderoController {
 	@Autowired
 	private TarifaServicio tarifaServicio;
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(value = "/listadovehiculos")
 	@ResponseBody
 	public Map<String, Object> listarTodosLosTicketsParqueadero(@RequestParam int pagina, @RequestParam int tamano,
@@ -51,7 +51,6 @@ public class ParqueaderoController {
 		return parqueaderoSevicio.listarVehiculosParqueadero(pagina, tamano, dirOrdenamiento, campoOrdenamiento);
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/ingresarvehiculo")
 	public @ResponseBody Map<Long, String> registrarIngreso(@RequestBody VehiculoDTO vehiculoDTO) {
 		Map<Long, String> resultado = new HashMap<>();
@@ -78,7 +77,6 @@ public class ParqueaderoController {
 		return resultado;
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(value = "/retirarvehiculo")
 	public @ResponseBody Map<Long, String> retirarvehiculo(@RequestBody String placa) {
 		Map<Long, String> resultado = new HashMap<>();

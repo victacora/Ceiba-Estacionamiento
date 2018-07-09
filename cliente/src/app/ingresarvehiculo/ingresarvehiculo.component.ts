@@ -1,5 +1,5 @@
 import {DialogoComponent} from '../dialogo/dialogo.component';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ParqueaderoService} from '../parqueadero.service';
 
@@ -12,6 +12,10 @@ export class IngresarvehiculoComponent implements OnInit {
 
   public placa: string = '';
   public cilindraje: number = 0.0;
+
+  @ViewChild('ingresarvehiculofrm') ingresarvehiculofrm;
+  
+  @Output() public recargar = new EventEmitter();
 
   constructor(private dialog: MatDialog, private parqueaderoService: ParqueaderoService) {}
 
@@ -39,8 +43,8 @@ export class IngresarvehiculoComponent implements OnInit {
       this.parqueaderoService.ingresarVehiculo(vehiculo).subscribe((response) => {
         if (response) {
           for (var key in response) {
-            this.cilindraje=0;
-            this.placa="";
+            this.cilindraje = 0;
+            this.placa = "";
             this.dialog.open(DialogoComponent, {
               data: {
                 titulo: "Informacion",
@@ -49,6 +53,8 @@ export class IngresarvehiculoComponent implements OnInit {
             });
           }
         }
+        this.ingresarvehiculofrm.reset();
+        this.recargar.emit();
         console.info(response);
       });
     }

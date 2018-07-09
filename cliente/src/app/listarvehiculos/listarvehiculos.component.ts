@@ -1,6 +1,6 @@
 import {TicketParqueadero} from '../ticketparqueadero';
 import {Resultado} from '../resultado';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import {MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
 import {ParqueaderoService} from '../parqueadero.service';
 import {DataSource} from '@angular/cdk/collections';
@@ -25,6 +25,7 @@ export class ListarvehiculosComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  @Output() public retirar = new EventEmitter<TicketParqueadero>();
 
   constructor(private parqueaderoService: ParqueaderoService) {}
 
@@ -50,7 +51,7 @@ export class ListarvehiculosComponent implements OnInit {
       }),
       catchError(() => {
         this.cargando = false;
-        this.totalRegistros=0;
+        this.totalRegistros = 0;
         return observableOf([]);
       })
       ).subscribe(data => this.datos = (data as Resultado).elementos);
@@ -61,9 +62,8 @@ export class ListarvehiculosComponent implements OnInit {
 
   }
 
-  regitrarSalida(elment) {
-
-
+  regitrarSalida(ticketParqueadero: TicketParqueadero) {
+    this.retirar.emit(ticketParqueadero);
   }
 
 }

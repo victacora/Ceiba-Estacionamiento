@@ -1,5 +1,5 @@
 import {TicketParqueadero} from '../ticketparqueadero';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {DialogoComponent} from '../dialogo/dialogo.component';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {ParqueaderoService} from '../parqueadero.service';
@@ -15,6 +15,8 @@ export class RetirarvehiculoComponent implements OnInit {
   public cilindraje: number;
   public fechaIngreso: string;
 
+  @Output() public recargar = new EventEmitter()
+  
   constructor(private dialog: MatDialog, private parqueaderoService: ParqueaderoService) {}
 
   ngOnInit() {
@@ -43,6 +45,7 @@ export class RetirarvehiculoComponent implements OnInit {
               }
             });
           }
+          this.recargar.emit();
         }
         console.info(response);
       });

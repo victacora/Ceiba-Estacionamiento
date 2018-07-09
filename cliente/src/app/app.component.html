@@ -1,5 +1,9 @@
+
 <div class="content" fxLayout="row" fxLayout.xs="column" fxFlexFill>
-	<app-ingresarvehiculo fxFlex="20%"></app-ingresarvehiculo>
-	<app-listarvehiculos fxFlex="60%"></app-listarvehiculos>
-	<app-retirarvehiculo fxFlex="20%"></app-retirarvehiculo>
+	<app-ingresarvehiculo fxFlex="20%"
+		(recargar)="recargarListadoParqueadero()"></app-ingresarvehiculo>
+	<app-listarvehiculos fxFlex="60%"
+		(retirar)="registrarSalidaParqueadero($event)"></app-listarvehiculos>
+	<app-retirarvehiculo fxFlex="20%"
+		(recargar)="recargarListadoParqueadero()"></app-retirarvehiculo>
 </div>

@@ -2,15 +2,15 @@
 <mat-card> <mat-card-header> <mat-card-title>
 <h1>Registrar entrada</h1>
 </mat-card-title> </mat-card-header> <mat-card-content>
-<form class="ingresarvehiculo">
+<form class="ingresarvehiculo" #ingresarvehiculofrm="ngForm">
 	<div fxLayout="column">
 		<label>Placa</label>
 		<mat-form-field> <input name="placa" matInput
 			[(ngModel)]="placa" placeholder="Ingrese numero de placa" required>
 		</mat-form-field>
 		<label>Cilindraje(En caso de motocicleta)</label>
-		<mat-form-field> <input name="cilindraje" type="number"
-			[(ngModel)]="cilindraje" value="0.0" matInput
+		<mat-form-field> <input name="cilindraje"
+			type="number" [(ngModel)]="cilindraje" value="0.0" matInput
 			placeholder="Ingrese el cilindraje"> </mat-form-field>
 	</div>
 </form>
