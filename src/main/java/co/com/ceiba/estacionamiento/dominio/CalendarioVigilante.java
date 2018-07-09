@@ -10,16 +10,21 @@ public class CalendarioVigilante {
 	private int diaActual;
 	private int mesActual;
 	private int anioActual;
-	
-	public CalendarioVigilante(int diaActual,int mesActual, int anioActual)
-	{
+	private Calendar calendario;
+
+	public CalendarioVigilante(int diaActual, int mesActual, int anioActual) {
 		this.diaActual = diaActual;
 		this.mesActual = mesActual;
 		this.anioActual = anioActual;
+		calendario = Calendar.getInstance();
+		calendario.set(Calendar.YEAR, anioActual);
+		calendario.set(Calendar.DAY_OF_MONTH, diaActual);
+		calendario.set(Calendar.MONTH, mesActual);
 	}
-		
+
 	public boolean esDiaHabil() {
-		return diaActual == Calendar.SUNDAY || diaActual == Calendar.MONDAY;
+		return calendario.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+				|| calendario.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
 	}
 
 	public int getDiaActual() {
@@ -33,10 +38,10 @@ public class CalendarioVigilante {
 	public int getAnioActual() {
 		return anioActual;
 	}
-	
-	public Date getFechaActual(){
-		SimpleDateFormat formatoFecha=new SimpleDateFormat("dd/MM/yyyy");
-		StringBuilder fecha=new StringBuilder();
+
+	public Date getFechaActual() {
+		SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+		StringBuilder fecha = new StringBuilder();
 		fecha.append(this.diaActual);
 		fecha.append("/");
 		fecha.append(this.mesActual);

@@ -46,8 +46,8 @@ public class ParqueaderoController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(value = "/listadovehiculos")
 	@ResponseBody
-	public List<TicketParqueaderoDTO> listarTodosLosTicketsParqueadero(@RequestParam int pagina,
-			@RequestParam int tamano, @RequestParam String dirOrdenamiento, @RequestParam String campoOrdenamiento) {
+	public Map<String, Object> listarTodosLosTicketsParqueadero(@RequestParam int pagina, @RequestParam int tamano,
+			@RequestParam String dirOrdenamiento, @RequestParam String campoOrdenamiento) {
 		return parqueaderoSevicio.listarVehiculosParqueadero(pagina, tamano, dirOrdenamiento, campoOrdenamiento);
 	}
 
@@ -59,7 +59,8 @@ public class ParqueaderoController {
 			boolean vehiculoRegistradoCorrectamente = parqueaderoSevicio.registraringreso(vehiculoDTO, vehiculoServicio,
 					tarifaServicio);
 			if (vehiculoRegistradoCorrectamente) {
-				resultado.put(COD_OPERACION_EXITOSA, "Vehiculo registrado correctamente.");
+				resultado.put(COD_OPERACION_EXITOSA,
+						"Entrada registrada, para vehiculo con placa " + vehiculoDTO.getPlaca() + ".");
 			} else {
 
 				resultado.put(COD_OPERACION_ERRONEA, "No se pudo registrar el vehiculo.");
@@ -85,7 +86,7 @@ public class ParqueaderoController {
 			TicketParqueadero ticketParqueadero = parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio,
 					tarifaServicio);
 			if (ticketParqueadero != null) {
-				resultado.put(COD_OPERACION_EXITOSA, "El vehiculo fue retirado correctamente.");
+				resultado.put(COD_OPERACION_EXITOSA, "Salida registrada, para vehiculo con placa " + placa + ".");
 			} else {
 				resultado.put(COD_OPERACION_ERRONEA, "No se pudo retirar el vehiculo.");
 			}

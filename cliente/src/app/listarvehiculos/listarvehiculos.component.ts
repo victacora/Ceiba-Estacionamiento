@@ -1,4 +1,5 @@
 import {TicketParqueadero} from '../ticketparqueadero';
+import {Resultado} from '../resultado';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource, MatPaginator, MatSort} from '@angular/material';
 import {ParqueaderoService} from '../parqueadero.service';
@@ -29,6 +30,10 @@ export class ListarvehiculosComponent implements OnInit {
 
   ngAfterViewInit() {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.cargarRegistros();
+  }
+
+  public cargarRegistros() {
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
       startWith({}),
@@ -39,14 +44,16 @@ export class ListarvehiculosComponent implements OnInit {
       }),
       map(data => {
         this.cargando = false;
-        this.totalRegistros = data.length;
+        this.totalRegistros = data.total;
+        data.elementos
         return data;
       }),
       catchError(() => {
         this.cargando = false;
+        this.totalRegistros=0;
         return observableOf([]);
       })
-      ).subscribe(data => this.datos = data);
+      ).subscribe(data => this.datos = (data as Resultado).elementos);
 
   }
 

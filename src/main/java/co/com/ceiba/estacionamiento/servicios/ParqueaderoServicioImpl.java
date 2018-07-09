@@ -1,7 +1,9 @@
 package co.com.ceiba.estacionamiento.servicios;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,7 +78,7 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 	}
 
 	@Override
-	public List<TicketParqueaderoDTO> listarVehiculosParqueadero(int pagina, int tamano, String dirOrdenamiento,
+	public Map<String, Object> listarVehiculosParqueadero(int pagina, int tamano, String dirOrdenamiento,
 			String campoOrdenamiento) {
 
 		PageRequest pageReq = PageRequest.of(pagina, tamano, Sort.Direction.fromString(dirOrdenamiento),
@@ -88,9 +90,14 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 			throw new PaginaNoEncontradaException("El numero de pagina consultado es erroneo.");
 		}
 		List<TicketParqueaderoEntity> ticketParqueaderoEntities = ticketParqueaderoPage.getContent();
-		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder=new TicketParqueaderoDTOBuilder();
-		return ticketParqueaderoEntities.stream().map(ticketParqueaderoDTOBuilder::convertirADTO)
-				.collect(Collectors.toList());
+		int totalRegistros = ticketParqueaderoRepositorio.contarVehiculosParqueadero();
+		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder = new TicketParqueaderoDTOBuilder();
+		List<TicketParqueaderoDTO> ticketParqueaderoDTOs = ticketParqueaderoEntities.stream()
+				.map(ticketParqueaderoDTOBuilder::convertirADTO).collect(Collectors.toList());
+		Map<String, Object> resultado = new LinkedHashMap<>();
+		resultado.put("total", totalRegistros);
+		resultado.put("elementos", ticketParqueaderoDTOs);
+		return resultado;
 	}
 
 	@Override
@@ -101,7 +108,7 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 				vehiculoDTO.getCilindraje());
 		Calendar cal = Calendar.getInstance();
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(cal.get(Calendar.DAY_OF_MONTH),
-				(cal.get(Calendar.MONTH) + 1), cal.get(Calendar.YEAR));
+				cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
 
 		Vigilante vigilante = new Vigilante(this, vehiculoServicio, tarifaServicio, calendarioVigilante);
 
@@ -113,7 +120,7 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 			TarifaServicio tarifaServicio) {
 		Calendar cal = Calendar.getInstance();
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(cal.get(Calendar.DAY_OF_MONTH),
-				(cal.get(Calendar.MONTH) + 1), cal.get(Calendar.YEAR));
+				cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
 
 		Vigilante vigilante = new Vigilante(this, vehiculoServicio, tarifaServicio, calendarioVigilante);
 

@@ -2,7 +2,9 @@ package co.com.ceiba.estacionamiento.unitarias;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -71,17 +73,20 @@ public class ParqueaderoRestApiTest {
 		TicketParqueaderoEntity ticketParqueaderoEntity = new TicketParqueaderoEntityTestDataBuilder().withId(1l)
 				.withValor(1000).withFechaIngreso(new Date()).withFechaSalida(new Date()).withVehiculo(vehiculoEntity)
 				.build();
-		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder=new TicketParqueaderoDTOBuilder();
+		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder = new TicketParqueaderoDTOBuilder();
 		TicketParqueaderoDTO ticketParqueaderoDTO = ticketParqueaderoDTOBuilder.convertirADTO(ticketParqueaderoEntity);
 
 		List<TicketParqueaderoDTO> ticketParqueaderos = Arrays.asList(ticketParqueaderoDTO);
-
-		given(parqueaderoSevicio.listarVehiculosParqueadero(0, 10, "ASC", "fecha_ingreso")).willReturn(ticketParqueaderos);
+		Map<String, Object> resultado = new LinkedHashMap<>();
+		resultado.put("total",ticketParqueaderos.size());
+		resultado.put("elementos", ticketParqueaderos);
+		
+		given(parqueaderoSevicio.listarVehiculosParqueadero(0, 10, "ASC", "fecha_ingreso")).willReturn(resultado);
 
 		mvc.perform(
 				get("/parqueadero/listadovehiculos?pagina=0&tamano=10&dirOrdenamiento=ASC&campoOrdenamiento=fecha_ingreso")
 						.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].id", is(1)));
+				.andExpect(status().isOk()).andExpect(jsonPath("$.total", is(ticketParqueaderos.size())));
 	}
 
 	@Test
@@ -109,8 +114,7 @@ public class ParqueaderoRestApiTest {
 		given(parqueaderoSevicio.retirarVehiculo(carro.getPlaca(), vehiculoServicio, tarifaServicio))
 				.willReturn(ticketParqueadero);
 
-		mvc.perform(
-				post("/parqueadero/retirarvehiculo").contentType(MediaType.TEXT_PLAIN).content(carro.getPlaca()))
+		mvc.perform(post("/parqueadero/retirarvehiculo").contentType(MediaType.TEXT_PLAIN).content(carro.getPlaca()))
 				.andExpect(status().isOk());
 	}
 

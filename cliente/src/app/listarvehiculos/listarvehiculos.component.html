@@ -3,40 +3,30 @@
 		<mat-spinner *ngIf="cargando"></mat-spinner>
 	</div>
 
-	<div class="table-container">
-		<mat-card> <mat-card-header> <mat-card-title>
-		<h1>Lista de Cobros</h1>
-		</mat-card-title> </mat-card-header> <mat-card-content>
-		<mat-table class="table" [dataSource]="datos" matSort
-			matSortActive="id" matSortDisableClear matSortDirection="asc">
-
-			<mat-header-row *matHeaderRowDef="listaColumnas"></mat-header-row>
-			<mat-row *matRowDef="let row; columns: listaColumnas;"></mat-row>
-
-			<ng-container matColumnDef="id"> <mat-header-cell
-				*matHeaderCellDef mat-sort-header matSortDisableClear> Id </mat-header-cell> <mat-cell
-				*matCellDef="let element"> {{element.id}} </mat-cell> </ng-container>
-
-			<ng-container matColumnDef="placa"> <mat-header-cell
-				*matHeaderCellDef mat-sort-header> Placa </mat-header-cell> <mat-cell
-				*matCellDef="let element"> {{element.placa}} </mat-cell> </ng-container>
-
-			<ng-container matColumnDef="tipo_vehiculo"> <mat-header-cell
-				*matHeaderCellDef> Tipo </mat-header-cell> <mat-cell
-				*matCellDef="let element"> {{element.tipoVehiculo}} </mat-cell> </ng-container>
-
-			<ng-container matColumnDef="fecha_ingreso"> <mat-header-cell
-				*matHeaderCellDef mat-sort-header> Fecha entrada </mat-header-cell>
-			<mat-cell *matCellDef="let element">
-			{{element.fechaIngreso}} </mat-cell> </ng-container>
-
-			<ng-container matColumnDef="operaciones"> <mat-header-cell
-				*matHeaderCellDef mat-sort-header> </mat-header-cell> <mat-cell
-				*matCellDef="let element">
-			<button mat-raised-button color="primary" (click)="regitrarSalida(element)">Salida</button>
-			</mat-cell> </ng-container>
-		</mat-table>
-		<mat-paginator [length]="totalRegistros" [pageSize]="10">
-		</mat-paginator> </mat-card-content> </mat-card>
-	</div>
+	<mat-card> <mat-card-header> <mat-card-title>
+	<h1>Lista de Cobros</h1>
+	</mat-card-title> </mat-card-header> <mat-card-content> <mat-table class="table"
+		[dataSource]="datos" matSort matSortActive="id" matSortDisableClear
+		matSortDirection="asc"> <mat-header-row
+		*matHeaderRowDef="listaColumnas"></mat-header-row> <mat-row
+		*matRowDef="let row; columns: listaColumnas;"></mat-row> <ng-container
+		matColumnDef="id"> <mat-header-cell *matHeaderCellDef
+		mat-sort-header matSortDisableClear> Id </mat-header-cell> <mat-cell
+		*matCellDef="let element"> {{element.id}} </mat-cell> </ng-container> <ng-container
+		matColumnDef="placa"> <mat-header-cell
+		*matHeaderCellDef mat-sort-header> Placa </mat-header-cell> <mat-cell
+		*matCellDef="let element"> {{element.placa}} </mat-cell> </ng-container> <ng-container
+		matColumnDef="tipo_vehiculo"> <mat-header-cell
+		*matHeaderCellDef> Tipo </mat-header-cell> <mat-cell
+		*matCellDef="let element"> {{element.tipoVehiculo}} </mat-cell> </ng-container> <ng-container
+		matColumnDef="fecha_ingreso"> <mat-header-cell
+		*matHeaderCellDef mat-sort-header> Fecha entrada </mat-header-cell> <mat-cell
+		*matCellDef="let element"> {{element.fechaIngreso}} </mat-cell> </ng-container> <ng-container
+		matColumnDef="operaciones"> <mat-header-cell
+		*matHeaderCellDef mat-sort-header> </mat-header-cell> <mat-cell
+		*matCellDef="let element">
+	<button mat-raised-button color="primary"
+		(click)="regitrarSalida(element)">Salida</button>
+	</mat-cell> </ng-container> </mat-table> <mat-paginator [length]="totalRegistros" [pageSize]="10">
+	</mat-paginator> </mat-card-content> </mat-card>
 </div>

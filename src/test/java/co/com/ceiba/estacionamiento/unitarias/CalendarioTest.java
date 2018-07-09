@@ -12,7 +12,7 @@ public class CalendarioTest {
 	@Test
 	public void validarEsDiaHabil() {
 		// arrange
-		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(Calendar.MONDAY, 6, 2018);
+		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(1, 6, 2018);
 		// act
 		boolean resultado = calendarioVigilante.esDiaHabil();
 		// assert
@@ -22,7 +22,7 @@ public class CalendarioTest {
 	@Test
 	public void validarDiaNoHabil() {
 		// arrange
-		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(Calendar.TUESDAY, 6, 2018);
+		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(3, 6, 2018);
 		// act
 		boolean resultado = calendarioVigilante.esDiaHabil();
 		// assert

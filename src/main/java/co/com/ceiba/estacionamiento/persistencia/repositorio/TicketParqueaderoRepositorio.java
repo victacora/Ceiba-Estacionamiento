@@ -27,4 +27,7 @@ public interface TicketParqueaderoRepositorio extends PagingAndSortingRepository
 	@Query(value = "SELECT * FROM ticket_parqueadero t  WHERE t.placa=:placa AND t.fecha_salida IS NULL", nativeQuery = true)
 	public Optional<TicketParqueaderoEntity> obtenerTicketParqueaderoByPlaca(@Param("placa") String placa);
 
+	@Query(value = "SELECT COUNT(*) FROM ticket_parqueadero t  WHERE t.fecha_salida IS NULL", nativeQuery = true)
+	public int contarVehiculosParqueadero();
+
 }
