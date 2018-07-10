@@ -37,6 +37,14 @@ dependencies {
 	testCompile ('junit:junit')
 }
 
+def webappDir = "$projectDir/src/main/webapp"
+sourceSets {
+	main {
+		resources {
+			srcDirs = ["$webappDir/dist", "$projectDir/src/main/resources"]
+		}
+	}
+}
 
 test {
 	jacoco {
