@@ -61,8 +61,7 @@ public class ParqueaderoRestApiTest {
 
 		mvc.perform(
 				post("/parqueadero/ingresarvehiculo").contentType(MediaType.APPLICATION_JSON).content(vehiculoDTOJson))
-				.andExpect(status().isOk()).andExpect(content().json(
-						"{\"1001\": \"Entrada registrada, para vehiculo con placa " + vehiculoDTO.getPlaca() + ".\"}"));
+				.andExpect(status().isOk());
 
 	}
 
@@ -70,8 +69,7 @@ public class ParqueaderoRestApiTest {
 	public void retirarVehiculoParqueadero() throws Exception {
 		String placa = "CXX-000";
 		mvc.perform(post("/parqueadero/retirarvehiculo").contentType(MediaType.TEXT_PLAIN).content(placa))
-				.andExpect(status().isOk())
-				.andExpect(content().json("{\"1001\": \"Salida registrada, para vehiculo con placa " + placa + ".\"}"));
+				.andExpect(status().isOk());
 	}
 
 	public static String json(final Object obj) {

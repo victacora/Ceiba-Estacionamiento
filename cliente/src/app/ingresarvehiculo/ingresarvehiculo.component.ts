@@ -41,23 +41,23 @@ export class IngresarvehiculoComponent implements OnInit {
       };
 
       this.parqueaderoService.ingresarVehiculo(vehiculo).subscribe((response) => {
-        if (response) {
-          for (var key in response) {
-            this.cilindraje = 0;
-            this.placa = "";
-            this.dialog.open(DialogoComponent, {
-              data: {
-                titulo: "Informacion",
-                mensaje: response[key]
-              }
-            });
+        this.dialog.open(DialogoComponent, {
+          data: {
+            titulo: "Informacion",
+            mensaje: "Entrada registrada, para vehiculo con placa " + this.placa + "."
           }
-        }
+        });
+        this.recargar.emit();
         this.placa = '';
         this.cilindraje = 0;
         this.ingresarvehiculofrm.reset();
-        this.recargar.emit();
-        console.info(response);
+      }, (error) => {
+        this.dialog.open(DialogoComponent, {
+          data: {
+            titulo: "Error",
+            mensaje: error.error.message
+          }
+        });
       });
     }
   }

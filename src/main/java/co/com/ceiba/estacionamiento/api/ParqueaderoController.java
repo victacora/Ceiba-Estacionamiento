@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
 import co.com.ceiba.estacionamiento.dominio.dto.VehiculoDTO;
@@ -52,49 +54,14 @@ public class ParqueaderoController {
 	}
 
 	@PostMapping(value = "/ingresarvehiculo")
-	public @ResponseBody Map<Long, String> registrarIngreso(@RequestBody VehiculoDTO vehiculoDTO) {
-		Map<Long, String> resultado = new HashMap<>();
-		try {
-			boolean vehiculoRegistradoCorrectamente = parqueaderoSevicio.registraringreso(vehiculoDTO, vehiculoServicio,
-					tarifaServicio);
-			if (vehiculoRegistradoCorrectamente) {
-				resultado.put(COD_OPERACION_EXITOSA,
-						"Entrada registrada, para vehiculo con placa " + vehiculoDTO.getPlaca() + ".");
-			} else {
-
-				resultado.put(COD_OPERACION_ERRONEA, "No se pudo registrar el vehiculo.");
-			}
-		} catch (CupoExcedidoException e) {
-			resultado.put(e.getCodigoError(), e.getMessage());
-			logger.error(e);
-		} catch (AccesoRestringidoException e) {
-			resultado.put(e.getCodigoError(), e.getMessage());
-			logger.error(e);
-		} catch (VehiculoRegistradoException e) {
-			resultado.put(e.getCodigoError(), e.getMessage());
-			logger.error(e);
-		}
-		return resultado;
+	@ResponseStatus(value = HttpStatus.OK)
+	public void registrarIngreso(@RequestBody VehiculoDTO vehiculoDTO) {
+		parqueaderoSevicio.registraringreso(vehiculoDTO, vehiculoServicio, tarifaServicio);
 	}
 
 	@PostMapping(value = "/retirarvehiculo")
-	public @ResponseBody Map<Long, String> retirarvehiculo(@RequestBody String placa) {
-		Map<Long, String> resultado = new HashMap<>();
-		try {
-			TicketParqueadero ticketParqueadero = parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio,
-					tarifaServicio);
-			if (ticketParqueadero != null) {
-				resultado.put(COD_OPERACION_EXITOSA, "Salida registrada, para vehiculo con placa " + placa + ".");
-			} else {
-				resultado.put(COD_OPERACION_ERRONEA, "No se pudo retirar el vehiculo.");
-			}
-		} catch (VehiculoNoEncontradoException e) {
-			resultado.put(e.getCodigoError(), e.getMessage());
-			logger.error(e);
-		} catch (VehiculoNoRegistradoException e) {
-			resultado.put(e.getCodigoError(), e.getMessage());
-			logger.error(e);
-		}
-		return resultado;
+	@ResponseStatus(value = HttpStatus.OK)
+	public void retirarvehiculo(@RequestBody String placa) {
+		parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio, tarifaServicio);
 	}
 }
