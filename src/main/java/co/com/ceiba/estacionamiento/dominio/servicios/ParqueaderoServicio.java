@@ -25,7 +25,7 @@ public interface ParqueaderoServicio {
 	public boolean registraringreso(VehiculoDTO vehiculo, VehiculoServicio vehiculoServicio,
 			TarifaServicio tarifaServicio);
 
-	public TicketParqueadero retirarVehiculo(String placa, VehiculoServicio vehiculoServicio,
+	public TicketParqueaderoDTO retirarVehiculo(String placa, VehiculoServicio vehiculoServicio,
 			TarifaServicio tarifaServicio);
 
 }

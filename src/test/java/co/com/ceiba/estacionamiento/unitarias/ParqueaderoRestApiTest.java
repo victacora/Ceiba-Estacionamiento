@@ -111,8 +111,11 @@ public class ParqueaderoRestApiTest {
 		TicketParqueadero ticketParqueadero = new TicketParqueaderoTestDataBuilder().withVehiculo(carro)
 				.withFechaIngreso(new Date()).build();
 
+		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder = new TicketParqueaderoDTOBuilder();
+		TicketParqueaderoDTO ticketParqueaderoDTO = ticketParqueaderoDTOBuilder.convertirADTO(ticketParqueadero);
+
 		given(parqueaderoSevicio.retirarVehiculo(carro.getPlaca(), vehiculoServicio, tarifaServicio))
-				.willReturn(ticketParqueadero);
+				.willReturn(ticketParqueaderoDTO);
 
 		mvc.perform(post("/parqueadero/retirarvehiculo").contentType(MediaType.TEXT_PLAIN).content(carro.getPlaca()))
 				.andExpect(status().isOk());

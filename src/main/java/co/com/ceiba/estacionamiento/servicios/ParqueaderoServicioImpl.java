@@ -116,15 +116,15 @@ public class ParqueaderoServicioImpl implements ParqueaderoServicio {
 	}
 
 	@Override
-	public TicketParqueadero retirarVehiculo(String placa, VehiculoServicio vehiculoServicio,
+	public TicketParqueaderoDTO retirarVehiculo(String placa, VehiculoServicio vehiculoServicio,
 			TarifaServicio tarifaServicio) {
 		Calendar cal = Calendar.getInstance();
 		CalendarioVigilante calendarioVigilante = new CalendarioVigilante(cal.get(Calendar.DAY_OF_MONTH),
 				cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
 
 		Vigilante vigilante = new Vigilante(this, vehiculoServicio, tarifaServicio, calendarioVigilante);
-
-		return vigilante.retirarVehiculo(placa);
+		TicketParqueaderoDTOBuilder ticketParqueaderoDTOBuilder = new TicketParqueaderoDTOBuilder();
+		return ticketParqueaderoDTOBuilder.convertirADTO(vigilante.retirarVehiculo(placa));
 	}
 
 }

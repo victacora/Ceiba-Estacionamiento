@@ -1,4 +1,5 @@
 import { Resultado } from './resultado';
+import { TicketParqueadero } from './ticketparqueadero';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
@@ -23,7 +24,7 @@ export class ParqueaderoService {
   }
 
   retirarVehiculo(placa) {
-    return this.httpClient.post(this.API_URL + '/retirarvehiculo', placa);
+    return this.httpClient.post<TicketParqueadero>(this.API_URL + '/retirarvehiculo', placa);
   }
 
 }

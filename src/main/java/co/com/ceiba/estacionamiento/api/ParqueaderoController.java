@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import co.com.ceiba.estacionamiento.dominio.TicketParqueadero;
+import co.com.ceiba.estacionamiento.dominio.dto.TicketParqueaderoDTO;
 import co.com.ceiba.estacionamiento.dominio.dto.VehiculoDTO;
 import co.com.ceiba.estacionamiento.dominio.excepciones.AccesoRestringidoException;
 import co.com.ceiba.estacionamiento.dominio.excepciones.CupoExcedidoException;
@@ -61,7 +62,7 @@ public class ParqueaderoController {
 
 	@PostMapping(value = "/retirarvehiculo")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void retirarvehiculo(@RequestBody String placa) {
-		parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio, tarifaServicio);
+	public @ResponseBody TicketParqueaderoDTO retirarvehiculo(@RequestBody String placa) {
+		return parqueaderoSevicio.retirarVehiculo(placa, vehiculoServicio, tarifaServicio);
 	}
 }

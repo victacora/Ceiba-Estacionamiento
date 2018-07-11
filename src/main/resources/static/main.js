@@ -643,12 +643,15 @@ var RetirarvehiculoComponent = /** @class */ (function () {
         var _this = this;
         if (this.placa !== '') {
             this.parqueaderoService.retirarVehiculo(this.placa).subscribe(function (response) {
-                _this.dialog.open(_dialogo_dialogo_component__WEBPACK_IMPORTED_MODULE_1__["DialogoComponent"], {
-                    data: {
-                        titulo: "Informacion",
-                        mensaje: "Salida registrada, para vehiculo con placa " + _this.placa + "."
-                    }
-                });
+                if (response.valor) {
+                    _this.dialog.open(_dialogo_dialogo_component__WEBPACK_IMPORTED_MODULE_1__["DialogoComponent"], {
+                        data: {
+                            titulo: "Informacion",
+                            mensaje: "Salida registrada, para vehiculo con placa " + _this.placa + ". Valor a pagar: " + response.valor
+                        }
+                    });
+                    console.info(response);
+                }
                 _this.recargar.emit();
                 _this.placa = '';
                 _this.cilindraje = 0;

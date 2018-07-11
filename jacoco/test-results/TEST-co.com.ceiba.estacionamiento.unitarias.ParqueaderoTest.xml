@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2018-06-27T19:34:56" hostname="VICTOR-PUYO" time="0.212">
+<testsuite name="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2018-07-11T12:53:09" hostname="VICTOR-PUYO" time="0.146">
   <properties/>
-  <testcase name="ValidarCuposMotoMax10" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCobroCarroParaVariosDiasYHoras" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCuposCarroMax20" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCobroMotoParaVariosDiasYHoras" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
-  <testcase name="IngresarMoto" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.209"/>
-  <testcase name="ValidarCobroMotoCilindrajeMayor500CC" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCobroDiaMoto" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="IngresarCarro" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCobroHoraCarro" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCobroHoraMoto" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarCobroDiaCarro" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
-  <testcase name="ValidarAccesoVehiculoPlacasTerminadasEnA" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.0"/>
+  <testcase name="validarCobroHoraCarro" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.131"/>
+  <testcase name="validarCobroDiaMoto" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="validarCuposCarroMax20" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="ingresarCarro" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="ingresarMoto" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="validarCuposMotoMax10" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="validarCobroMotoPara10Hora650CC" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.002"/>
+  <testcase name="validarCobroHoraMoto" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="validarCobroDiaCarro" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="validarIngresoVehiculoDiaHabilTest" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
+  <testcase name="validarCobroMotoCilindrajeMayor500CC" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.002"/>
+  <testcase name="validarCobroCarroUnDiaY3horas" classname="co.com.ceiba.estacionamiento.unitarias.ParqueaderoTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -33,13 +33,15 @@ export class RetirarvehiculoComponent implements OnInit {
   public retirarVehiculo() {
     if (this.placa !== '') {
       this.parqueaderoService.retirarVehiculo(this.placa).subscribe((response) => {
-
-        this.dialog.open(DialogoComponent, {
-          data: {
-            titulo: "Informacion",
-            mensaje: "Salida registrada, para vehiculo con placa " + this.placa + "."
-          }
-        });
+        if (response.valor) {
+          this.dialog.open(DialogoComponent, {
+            data: {
+              titulo: "Informacion",
+              mensaje: "Salida registrada, para vehiculo con placa " + this.placa + ". Valor a pagar: " + response.valor
+            }
+          });
+          console.info(response);
+        }
         this.recargar.emit();
         this.placa = '';
         this.cilindraje = 0;
